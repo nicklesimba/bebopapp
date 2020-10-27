@@ -15,10 +15,12 @@ cursor = db.cursor()
 
 print(cursor)
 
-number_of_rows = cursor.execute("
-    SELECT * 
+sql = """
+    SELECT *
     FROM Users
-")
+"""
+
+number_of_rows = cursor.execute(sql)
 
 print(number_of_rows)
 
