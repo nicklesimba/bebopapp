@@ -21,13 +21,15 @@ sql = """
 """
 
 number_of_rows = cursor.execute(sql)
-
 print(number_of_rows)
 
 sql = """
     INSERT INTO Posts (post_id, location, post_message, reply_ids, likes, dislikes)
     VALUES (1, "Champaign", "This is the 1st message put into the application", "", 0, 0)
 """
+
+number_of_rows = cursor.execute(sql)
+print(number_of_rows)
 
 db.commit()
 db.close()

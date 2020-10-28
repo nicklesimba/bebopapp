@@ -21,7 +21,14 @@ sql = """
 """
 
 number_of_rows = cursor.execute(sql)
+print(number_of_rows)
 
+sql = """
+    SELECT *
+    FROM Posts
+"""
+
+number_of_rows = cursor.execute(sql)
 print(number_of_rows)
 
 db.close()
