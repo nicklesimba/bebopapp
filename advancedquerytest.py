@@ -1,12 +1,12 @@
 from __future__ import print_function
 
-import MySQLdb as my
+import mysql.connector as my
 
 db = my.connect(
-    host="localhost", 
+    host="localhost",
+    database="bebop26dmnr_db", 
     user="bebop26dmnr_nicklesimba", 
-    passwd="Yareyaredaze2643", 
-    db="bebop26dmnr_db" 
+    password="Yareyaredaze2643"  
 )
 
 print(db)
@@ -14,6 +14,7 @@ print(db)
 cursor = db.cursor(prepared=True)
 
 print(cursor)
+
 '''
 This is an attempt at one of the two advanced backend queries we're supposed to do. Stuff in "quotes" is example data to make it clear.
 This query would essentially take the username "simha3", query for post_id in the Posted_By table NATURAL JOIN'd with Posts table.
@@ -32,9 +33,18 @@ sql = """
 
 query_tuple = ("nicklesimba", "Champaign")
 
-number_of_rows = cursor.execute(sql, query_tuple)
-print(number_of_rows)
+#sql = """
+#    SELECT *
+#    FROM Users
+#    WHERE username = %s
+#"""
 
-db.commit()
+#query_tuple = "nicklesimba"
+
+number_of_rows = cursor.execute(sql, query_tuple)
+records = cursor.fetchall()
+print(records)
+
+cursor.close()
 db.close()
 
