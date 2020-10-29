@@ -1,13 +1,12 @@
+# app.py
 import os
-import sys
+from flask import Flask, request, render_template, redirect, url_for
 
+project_root = os.path.dirname(os.path.realpath('__file__'))
+template_path = os.path.join(project_root, 'app/templates')
+static_path = os.path.join(project_root, 'app/static')
+app = Flask(__name__, template_folder=template_path, static_folder=static_path)
 
-sys.path.insert(0, os.path.dirname(__file__))
-
-
-def application(environ, start_response):
-    start_response('200 OK', [('Content-Type', 'text/plain')])
-    message = 'It works!\n'
-    version = 'Python %s\n' % sys.version.split()[0]
-    response = '\n'.join([message, version])
-    return [response.encode()]
+@app.route('/')
+def index():
+    return ' test world!'
