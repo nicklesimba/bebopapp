@@ -6,5 +6,5 @@ Hosting done via cPanel.
 Contributors:
 Nikhil S. (github: nicklesimba)
 Ram Muthukumaran - rmuthu4 (github: rammk1999)
-Divya B. (github: )
+Divya B. (github: DivyaBhati, netid: dbhati2)
 Maanu G. (github: Mongwell)
