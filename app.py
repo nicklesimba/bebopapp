@@ -9,7 +9,7 @@ app = Flask(__name__, template_folder=template_path, static_folder=static_path)
 
 @app.route('/')
 def index():
-    return render_template('login.html') #' test world!'
+    return ' test world!'
     
 
 @app.route('/login', methods=['GET', 'POST'])

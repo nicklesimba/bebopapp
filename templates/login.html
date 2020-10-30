@@ -1,20 +1,20 @@
 <html>
   <head>
-    <title>Welcome to Bebop!</title>
+    <title>Bebop Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body>
     <div class="container">
-      <h1>Please login</h1>
+      <h1>Welcome to Bebop! Please Login</h1>
       <br>
       <form action="" method="post">
-        <input type="text" placeholder="Username" name="username" value="{{
-          request.form.username }}">
-         <input type="text" placeholder="Password" name="password" value="{{
-          request.form.password }}">
-          <input type="text" placeholder="Location" name="location" value="{{
-          request.form.password }}">
+        <label for="username">Username: </label>
+        <input type="text" placeholder="Username" name="username" value="{{request.form.username }}"><br>
+        <label for="username">Password: </label>
+        <input type="text" placeholder="Password" name="password" value="{{request.form.password }}"><br>
+        <label for="username">Location: </label>
+        <input type="text" placeholder="Location" name="location" value="{{request.form.location }}"><br>
         <input class="btn btn-default" type="submit" value="Login">
       </form>
     </div>
