@@ -4,10 +4,10 @@ Repo for bebop webapp - a proximity based messaging app. Not planning on making 
 Hosting done via cPanel.
 
 ## Contributors:
-Nikhil S. (github: nicklesimba, netid: simha3)
+Nikhil S. - simha3 (github: nicklesimba)
 
-Ram Muthukumaran - rmuthu4 (github: rammk1999, netid: rmuthu4)
+Ram Muthukumaran - rmuthu4 (github: rammk1999)
 
-Divya B. (github: DivyaBhati, netid: dbhati2)
+Divya B. - dbhati2 (github: DivyaBhati)
 
-Maanu G. (github: Mongwell, netid: mgrover3)
+Maanu G. - mgrover3 (github: Mongwell)
