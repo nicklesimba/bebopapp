@@ -14,9 +14,16 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+        
     error = None
-    username = request.form['username']
-    password = request.form['password']
-    location = request.form['location']
+    username = request.form.get('username')
+    password = request.form.get('password')
+    location = request.form.get('location')
     
+    ## pass these as params to db query function
+    ## if usr and pword are in db, redirect to user feed with the location information
+    ## if not, display error message and suggest registration  
+
     return render_template('login.html', error=error)
