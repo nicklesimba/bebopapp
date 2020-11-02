@@ -48,7 +48,7 @@ def feed_query(user):
 # desc - takes in a username and post info, then adds the respective entry to Post and Posted_By tables
 # args - username + all the post info
 # ret  - N/A, just updates db table Post and Posted_By
-def createpost(user, location, post_message, tags, likes, dislikes):
+def createpost(user, location, post_message, tags):
     db = my.connect(
         host="localhost",
         database="bebop26dmnr_db", 
@@ -61,7 +61,7 @@ def createpost(user, location, post_message, tags, likes, dislikes):
 
     post_id = time.time()
     
-    # leaving out reply_ids because it's a new post. Post 
+    # leaving out reply_ids because it's a new post.
     sql = """
         INSERT INTO Posts (post_id, location, post_message, tags, likes, dislikes) 
         VALUES (%s, %s, %s, %s, 0, 0)
@@ -153,9 +153,11 @@ def likepost(user, post_id):
 
     cursor.close()
 
-# example frontend code
+# test area
+createpost("nicklesimba", "Champaign", "ayo", "")
+createpost("someUser123", "Champaign", "what's goooood?", "test")
 frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
-
+print(frontend_code)
 
 # to do section
 '''
@@ -165,3 +167,5 @@ create post [x]
 delete post [x]
 like/dislike post [ ]
 '''
+
+[post1, post2, post3, ...]
