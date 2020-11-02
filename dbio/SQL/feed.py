@@ -27,7 +27,7 @@ def feed_query(user):
         WHERE u.username = %s
     """
 
-    number_of_rows = cursor.execute(sql, user) # might need to be in format of a user string
+    number_of_rows = cursor.execute(sql, (user,)) # might need to be in format of a user string
     records = cursor.fetchall()
     print(records)
 
