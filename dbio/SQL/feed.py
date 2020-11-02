@@ -30,7 +30,10 @@ def feed_query(user):
     number_of_rows = cursor.execute(sql, user) # might need to be in format of a user string
     records = cursor.fetchall()
     print(records)
+
+
     cursor.close()
+    db.close()
 
     # 1.5
     # I think we'd also want to sort by post date. most recent to least recent! so this should replace the above query when the database structure supports it. 
@@ -81,7 +84,9 @@ def createpost(user, location, post_message, tags):
     number_of_rows = cursor.execute(sql, query_tuple)
     print(records)
 
+    db.commit()
     cursor.close()
+    db.close()
 
 # func - deletepost
 # desc - takes in a username and post_id, then deletes Post and Posted_By entry
@@ -115,7 +120,9 @@ def deletepost(user, post_id):
     number_of_rows = cursor.execute(sql, post_id)
     print(records)
 
+    db.commit()
     cursor.close()
+    db.close()
 
 # func - deletepost
 # desc - takes in a username and post_id, then deletes Post and Posted_By entry
@@ -151,7 +158,9 @@ def likepost(user, post_id):
     number_of_rows = cursor.execute(sql, post_id)
     print(records)
 
+    db.commit()
     cursor.close()
+    db.close()
 
 # test area
 createpost("nicklesimba", "Champaign", "ayo", "")
@@ -168,4 +177,4 @@ delete post [x]
 like/dislike post [ ]
 '''
 
-[post1, post2, post3, ...]
+# [post1, post2, post3, ...]
