@@ -66,8 +66,8 @@ def createpost(user, location, post_message, tags):
     
     # leaving out reply_ids because it's a new post.
     sql = """
-        INSERT INTO Posts (post_id, location, post_message, tags, likes, dislikes) 
-        VALUES (%s, %s, %s, %s, 0, 0)
+        INSERT INTO Posts (post_id, location, post_message, tags, reply_ids, likes, dislikes) 
+        VALUES (%s, %s, %s, %s, "", 0, 0)
     """
     query_tuple = (post_id, location, post_message, tags)
 
