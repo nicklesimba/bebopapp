@@ -163,19 +163,8 @@ def likepost(user, post_id):
     db.close()
 
 # test area
-createpost("nicklesimba", "Champaign", "ayo", "")
-time.sleep(5)
-createpost("someUser123", "Champaign", "what's goooood?", "test")
+# run only one createpost at a time for now.
+# createpost("nicklesimba", "Champaign", "ayo", "")
+# createpost("someUser123", "Champaign", "what's goooood?", "test")
 frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
 print(frontend_code)
-
-# to do section
-'''
-frontend actions that would require backend queries:
-view feed [x]
-create post [x]
-delete post [x]
-like/dislike post [ ]
-'''
-
-# [post1, post2, post3, ...]
