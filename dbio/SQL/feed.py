@@ -27,10 +27,13 @@ def feed_query(user):
         WHERE u.username = %s
     """
 
-    number_of_rows = cursor.execute(sql, user) # might need to be in format of a user string
+    number_of_rows = cursor.execute(sql, (user,)) # might need to be in format of a user string
     records = cursor.fetchall()
     print(records)
+
+
     cursor.close()
+    db.close()
 
     # 1.5
     # I think we'd also want to sort by post date. most recent to least recent! so this should replace the above query when the database structure supports it. 
@@ -48,7 +51,7 @@ def feed_query(user):
 # desc - takes in a username and post info, then adds the respective entry to Post and Posted_By tables
 # args - username + all the post info
 # ret  - N/A, just updates db table Post and Posted_By
-def createpost(user, location, post_message, tags, likes, dislikes):
+def createpost(user, location, post_message, tags):
     db = my.connect(
         host="localhost",
         database="bebop26dmnr_db", 
@@ -61,27 +64,29 @@ def createpost(user, location, post_message, tags, likes, dislikes):
 
     post_id = time.time()
     
-    # leaving out reply_ids because it's a new post. Post 
+    # leaving out reply_ids because it's a new post.
     sql = """
-        INSERT INTO Posts (post_id, location, post_message, tags, likes, dislikes) 
-        VALUES (%s, %s, %s, %s, 0, 0)
+        INSERT INTO Posts (post_id, location, post_message, tags, reply_ids, likes, dislikes) 
+        VALUES (%s, %s, %s, %s, "", 0, 0)
     """
     query_tuple = (post_id, location, post_message, tags)
 
     number_of_rows = cursor.execute(sql, query_tuple)
-    print(records)
+    print(number_of_rows)
 
     # Also need to incorporate posted_by relation
     sql = """
         INSERT INTO Posted_By (post_id, username) 
         VALUES (%s, %s)
     """
-    query_tuple = (post_id, username)
+    query_tuple = (post_id, user)
 
     number_of_rows = cursor.execute(sql, query_tuple)
-    print(records)
+    print(number_of_rows)
 
+    db.commit()
     cursor.close()
+    db.close()
 
 # func - deletepost
 # desc - takes in a username and post_id, then deletes Post and Posted_By entry
@@ -115,7 +120,9 @@ def deletepost(user, post_id):
     number_of_rows = cursor.execute(sql, post_id)
     print(records)
 
+    db.commit()
     cursor.close()
+    db.close()
 
 # func - deletepost
 # desc - takes in a username and post_id, then deletes Post and Posted_By entry
@@ -151,17 +158,13 @@ def likepost(user, post_id):
     number_of_rows = cursor.execute(sql, post_id)
     print(records)
 
+    db.commit()
     cursor.close()
+    db.close()
 
-# example frontend code
+# test area
+# run only one createpost at a time for now.
+# createpost("nicklesimba", "Champaign", "ayo", "")
+# createpost("someUser123", "Champaign", "what's goooood?", "test")
 frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
-
-
-# to do section
-'''
-frontend actions that would require backend queries:
-view feed [x]
-create post [x]
-delete post [x]
-like/dislike post [ ]
-'''
+print(frontend_code)
