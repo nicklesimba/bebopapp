@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>Bebop Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to Bebop! Please Login or Register</h1>
+      <br>
+      <form action="" method="post">
+        <label for="username">Username: </label>
+        <input type="text" placeholder="Username" name="username" value="{{request.form.username}}"><br>
+        
+        <label for="password">Password: </label>
+        <input type="text" placeholder="Password" name="password" value="{{request.form.password}}"><br>
+        
+        <label for="location">Location: </label>
+        <select type="text" placeholder="Location" name="location" value="{{request.form.location}}"><br>
+          <option value="Champaign">Champaign</option>
+          <option value="Urbana">Urbana</option>
+          <option value="Naperville">Naperville</option>
+          <option value="Arlington Heights">Arlington Heights</option>
+        </select><br>
+        
+        <input class="btn btn-default" type="submit" value="Login">
+        <input class="btn btn-default" type="submit" value="Register">
+      </form>
+    </div>
+  </body>
+</html>
