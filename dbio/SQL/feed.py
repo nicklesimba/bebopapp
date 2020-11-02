@@ -164,6 +164,7 @@ def likepost(user, post_id):
 
 # test area
 createpost("nicklesimba", "Champaign", "ayo", "")
+time.sleep(5)
 createpost("someUser123", "Champaign", "what's goooood?", "test")
 frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
 print(frontend_code)
