@@ -79,7 +79,7 @@ def createpost(user, location, post_message, tags):
         INSERT INTO Posted_By (post_id, username) 
         VALUES (%s, %s)
     """
-    query_tuple = (post_id, username)
+    query_tuple = (post_id, user)
 
     number_of_rows = cursor.execute(sql, query_tuple)
     print(number_of_rows)
