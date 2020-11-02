@@ -72,7 +72,7 @@ def createpost(user, location, post_message, tags):
     query_tuple = (post_id, location, post_message, tags)
 
     number_of_rows = cursor.execute(sql, query_tuple)
-    print(records)
+    print(number_of_rows)
 
     # Also need to incorporate posted_by relation
     sql = """
@@ -82,7 +82,7 @@ def createpost(user, location, post_message, tags):
     query_tuple = (post_id, username)
 
     number_of_rows = cursor.execute(sql, query_tuple)
-    print(records)
+    print(number_of_rows)
 
     db.commit()
     cursor.close()
