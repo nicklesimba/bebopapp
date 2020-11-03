@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Bebop Login</title>
+    <title>Bebop Login/Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
@@ -23,9 +23,14 @@
           <option value="Arlington Heights">Arlington Heights</option>
         </select><br>
         
-        <input class="btn btn-default" type="submit" value="Login">
-        <input class="btn btn-default" type="submit" value="Register">
+        <input class="btn btn-default" type="submit" name="Login" value="Login">
+        <input class="btn btn-default" type="submit" name="Register" value="Register">
       </form>
     </div>
+    {% if error %}
+    <div class="alert alert-warning" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
   </body>
 </html>

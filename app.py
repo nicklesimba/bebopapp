@@ -1,6 +1,7 @@
 # app.py
 import os
 from flask import Flask, request, render_template, redirect, url_for
+import users.py as users
 
 project_root = os.path.dirname(os.path.realpath('__file__'))
 template_path = os.path.join(project_root, 'templates')
@@ -16,14 +17,30 @@ def index():
 def login():
     if request.method == 'GET':
         return render_template('login.html')
-        
+    
     error = None
     username = request.form.get('username')
     password = request.form.get('password')
     location = request.form.get('location')
     
-    ## pass these as params to db query function
-    ## if usr and pword are in db, redirect to user feed with the location information
-    ## if not, display error message and suggest registration  
-
-    return render_template('login.html', error=error)
+    if 'Login' in request.form:
+        valid = users.check_login(username, password)
+        if valid:
+            ## redirect to feed page with location information
+            error = "Need to redirect - change this later"
+            return render_template('login.html', error=error)
+            
+        else:
+            error = "Invalid Username and Password"
+            return render_template('login.html', error=error)
+        
+    elif 'Register' in request.form:
+        try:
+            users.create_user(username, password, location)
+        except (TypeError, RuntimeError) as e:
+            error = e.args
+            return render_template('login.html', error=error)
+            
+    else:
+        error = "Something went wrong"
+        return render_template('login.html', error=error)
