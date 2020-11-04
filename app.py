@@ -1,7 +1,7 @@
 # app.py
 import os
 from flask import Flask, request, render_template, redirect, url_for
-import dbio.SQL.users.py as users
+import dbio.SQL.users as users
 
 project_root = os.path.dirname(os.path.realpath('__file__'))
 template_path = os.path.join(project_root, 'templates')
