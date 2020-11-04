@@ -17,6 +17,7 @@ def index():
 @app.route('/feed')
 def feed():
     post_info = {}
+    user = 'nicklesimba'
     query_result = queries.feed_query(user)
     for i in query_result:
         curr = {
