@@ -51,7 +51,7 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
         errStr = "Profile picture URL exceeds " + str(PROF_PIC_URL_LENGTH) + " characters."
         raise TypeError(errStr)
 
-    cursor = db.cursor(prepared=True)
+    cursor = db.cursor(buffered=True)
     cursor.execute(checkNameQuery, (username, ))
     numRows = cursor.rowcount
     cursor.close()
@@ -60,7 +60,7 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
         db.close()
         raise RuntimeError("Username taken.")
     else:
-        cursor = db.cursor(prepared=True)
+        cursor = db.cursor(buffered=True)
         cursor.execute(createQuery, (username, location, prof_pic_url, password))
         cursor.close()
         db.commit()
