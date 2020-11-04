@@ -41,13 +41,13 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
     if (len(username) > USERNAME_LENGTH):
         errStr = "Username exceeds " + str(USERNAME_LENGTH) + " characters."
         raise TypeError(errStr)
-    elif (len(password)):
+    elif (len(password) > PASSWORD_LENGTH):
         errStr = "Password exceeds " + str(PASSWORD_LENGTH) + " characters."
         raise TypeError(errStr)
-    elif (len(location)):
+    elif (len(location) > LOCATIONS_LENGTH):
         errStr = "Location exceeds " + str(LOCATIONS_LENGTH) + " characters."
         raise TypeError(errStr)
-    elif (len(prof_pic_url)):
+    elif (len(prof_pic_url) > PROF_PIC_URL_LENGTH):
         errStr = "Profile picture URL exceeds " + str(PROF_PIC_URL_LENGTH) + " characters."
         raise TypeError(errStr)
 
