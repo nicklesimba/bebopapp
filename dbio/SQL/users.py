@@ -37,6 +37,7 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
         password=PASSWORD
     )
 
+    # check parameter size for insertion into database
     if (len(username) > USERNAME_LENGTH):
         errStr = "Username exceeds " + str(USERNAME_LENGTH) + " characters."
         raise TypeError(errStr)
@@ -61,8 +62,9 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
         cursor = db.cursor(prepared=True)
         cursor.execute(createQuery, (username, location, prof_pic_url, password))
         cursor.close()
+        db.commit()
+        db.close()
 
-    db.close()
         
 
 
