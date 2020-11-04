@@ -1,8 +1,8 @@
 import mysql.connector as connector
 
-HOST="localhost",
-DATABASE="bebop26dmnr_db", 
-USER="bebop26dmnr_nicklesimba", 
+HOST="localhost"
+DATABASE="bebop26dmnr_db"
+USER="bebop26dmnr_nicklesimba"
 PASSWORD="Yareyaredaze2643"  
 USERNAME_LENGTH = 100
 LOCATIONS_LENGTH = 255
