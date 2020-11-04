@@ -20,29 +20,20 @@ def feed_query(user):
 
     # 1. query based on user, grab posts that are visible to them
 
-    # I think we'd also wanna return post_id in case someone clicks on the post so we can also query replies afterward based off the post_id
     sql = """
         SELECT post_id, post_message, location, tags, likes, dislikes, u.username
         FROM Posts p NATURAL JOIN Users u
         WHERE u.username = %s
+        ORDER BY post_id
     """
 
-    number_of_rows = cursor.execute(sql, (user,)) # might need to be in format of a user string
+    number_of_rows = cursor.execute(sql, (user,))
     records = cursor.fetchall()
     print(records)
 
 
     cursor.close()
     db.close()
-
-    # 1.5
-    # I think we'd also want to sort by post date. most recent to least recent! so this should replace the above query when the database structure supports it. 
-    # sql = """
-    #     SELECT p.post_id, p.post_message, p.location, p.tags, p.likes, p.dislikes, p.date
-    #     FROM Posts p NATURAL JOIN Users u
-    #     WHERE u.username = %s
-    #     ORDER BY p.date
-    # """
 
     # 2. take results, pass them to frontend for display
     return records;
@@ -108,17 +99,13 @@ def deletepost(user, post_id):
     sql = """
         DELETE FROM Posts WHERE post_id = %s
     """
-
-    number_of_rows = cursor.execute(sql, post_id)
-    print(records)
+    cursor.execute(sql, (post_id,))
 
     # Also need to incorporate posted_by relation
     sql = """
         DELETE FROM Posted_By WHERE post_id = %s
     """
-
-    number_of_rows = cursor.execute(sql, post_id)
-    print(records)
+    cursor.execute(sql, (post_id,))
 
     db.commit()
     cursor.close()
@@ -139,24 +126,50 @@ def likepost(user, post_id):
     print(db)
     cursor = db.cursor(prepared=True)
     print(cursor)
+
+    # check status of whether user has liked this post or not.
+    sql = """
+        SELECT liked
+        FROM Post_Interaction
+        WHERE post_id = %s
+    """
+
+    execute(sql, (post_id,))
+    records = cursor.fetchall() # this and the following if statement may need work, idk if i'm accessing the value correctly!
     
-    # leaving out reply_ids because it's a new post. Post 
-    sql = """
-        UPDATE Post
-        SET likes = likes + 1
-    """
+    if records[0] == 1: # is the post already liked? unlike it
+        # leaving out reply_ids because it's a new post. Post 
+        sql = """
+            UPDATE Post p
+            SET likes = likes - 1
+            WHERE p.post_id = %s
+        """
 
-    number_of_rows = cursor.execute(sql, post_id)
-    print(records)
+        cursor.execute(sql, (post_id,))
 
-    # user has marked post as liked, can't like it again
-    sql = """
-        UPDATE Posted_By
-        SET liked_post = 1
-    """
+        # user has marked post as liked, can't like it again
+        sql = """
+            UPDATE Post_Interaction
+            SET liked = 0
+        """
 
-    number_of_rows = cursor.execute(sql, post_id)
-    print(records)
+        cursor.execute(sql, (post_id,))
+    else:              # is the post unliked? like it
+        # leaving out reply_ids because it's a new post. Post 
+        sql = """
+            UPDATE Post
+            SET likes = likes + 1
+        """
+
+        cursor.execute(sql, (post_id,))
+
+        # user has marked post as liked, can't like it again
+        sql = """
+            UPDATE Post_Interaction
+            SET liked = 1
+        """
+
+        cursor.execute(sql, post_id)
 
     db.commit()
     cursor.close()
