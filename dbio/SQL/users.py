@@ -52,7 +52,8 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
         raise TypeError(errStr)
 
     cursor = db.cursor(prepared=True)
-    numRows = cursor.execute(checkNameQuery, (username))
+    cursor.execute(checkNameQuery, (username, ))
+    numRows = cursor.rowcount
     cursor.close()
 
     if (numRows > 0):
@@ -93,7 +94,8 @@ def check_login(username, password):
 
     cursor = db.cursor(buffered=True)
 
-    numRows = cursor.execute(searchQuery, (username, password))
+    cursor.execute(searchQuery, (username, password))
+    numRows = cursor.rowcount
 
     # cleanup
     cursor.close()
