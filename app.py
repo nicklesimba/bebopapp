@@ -27,7 +27,7 @@ def login():
         valid = users.check_login(username, password)
         if valid:
             ## redirect to feed page with location information
-            error = "Need to redirect - change this later"
+            error = "Login worked: need to redirect"
             return render_template('login.html', error=error)
             
         else:
@@ -37,6 +37,8 @@ def login():
     elif 'Register' in request.form:
         try:
             users.create_user(username, password, location)
+            error = "Registration worked: need to redirect"
+            return render_template('login.html', error=error)
         except (TypeError, RuntimeError) as e:
             error = e.args[0]
             return render_template('login.html', error=error)
