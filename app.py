@@ -30,7 +30,7 @@ def login():
         if valid:
             ## redirect to feed page with location information
             error = "Login worked: need to redirect"
-            return render_template('login.html', error=error)
+            return redirect(url_for('feed', username=username))
             
         else:
             error = "Invalid Username or Password"
@@ -50,11 +50,10 @@ def login():
         return render_template('login.html', error=error)
 
 
-@app.route('/feed')
-def feed():
+@app.route('/feed/<username>')
+def feed(username):
     post_info = {}
-    user = 'nicklesimba'
-    query_result = queries.feed_query(user)
+    query_result = queries.feed_query(username)
     for i in query_result:
         curr = {
             'name':i[6],
