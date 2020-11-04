@@ -1,12 +1,9 @@
 import mysql.connector as connector
 
-db = connector.connect(
-    host="localhost",
-    database="bebop26dmnr_db", 
-    user="bebop26dmnr_nicklesimba", 
-    password="Yareyaredaze2643"  
-)
-
+HOST="localhost",
+DATABASE="bebop26dmnr_db", 
+USER="bebop26dmnr_nicklesimba", 
+PASSWORD="Yareyaredaze2643"  
 USERNAME_LENGTH = 100
 LOCATIONS_LENGTH = 255
 PROF_PIC_URL_LENGTH = 255
@@ -17,8 +14,7 @@ createQuery = """
         VALUES (%s, %s, %s, %s);
 """
 
-checkNameQuery = """
-    SELECT username
+checkNameQuery = """ SELECT username
     FROM Users
     WHERE username = %s
 """
@@ -32,6 +28,14 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
     :param string prof_pic_url: Profile picture link.
     :return: 
     """
+
+    # connect to the database
+    db = connector.connect(
+        host=HOST,
+        database=DATABASE,
+        user=USER,
+        password=PASSWORD
+    )
 
     if (len(username) > USERNAME_LENGTH):
         errStr = "Username exceeds " + str(USERNAME_LENGTH) + " characters."
@@ -51,11 +55,14 @@ def create_user(username, password, location, prof_pic_url=""): # may need more 
     cursor.close()
 
     if (numRows > 0):
+        db.close()
         raise RuntimeError("Username taken.")
     else:
         cursor = db.cursor(prepared=True)
         cursor.execute(createQuery, (username, location, prof_pic_url, password))
         cursor.close()
+
+    db.close()
         
 
 
@@ -74,12 +81,23 @@ def check_login(username, password):
             False if either does not
     """
 
-    cursor = db.cursor(prepared=True)
+    # connect to the database
+    db = connector.connect(
+        host=HOST,
+        database=DATABASE,
+        user=USER,
+        password=PASSWORD
+    )
+
+    cursor = db.cursor(buffered=True)
 
     numRows = cursor.execute(searchQuery, (username, password))
+
+    # cleanup
     cursor.close()
+    db.close()
 
     if (numRows == 1):
-        True
+        return True
     else:
-        False
+        return False
