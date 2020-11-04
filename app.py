@@ -1,7 +1,7 @@
 # app.py
 import os
 from flask import Flask, request, render_template, redirect, url_for
-
+import dbio.SQL.feed as queries
 
 project_root = os.path.dirname(os.path.realpath('__file__'))
 template_path = os.path.join(project_root, 'templates')
@@ -16,14 +16,20 @@ def index():
 
 @app.route('/feed')
 def feed():
-    posts = ['post1','post2','post3','post4','post5']
-    post_info = {
-        'post1':{'name':'divya', 'text':'yoyoyoyo what up boi', 'likes':2, 'views':4},
-        'post2':{'name':'nikhil', 'text':'i hate CS 411!', 'likes':1001201, 'views':10310359},
-        'post3':{'name':'nikhil', 'text':'hi', 'likes':21, 'views':45},
-        'post4':{'name':'maanu', 'text':'Hello world, my name is Maanu', 'likes':-102, 'views':45102},
-        'post5':{'name':'ram', 'text':'lol!', 'likes':0, 'views':10},
-    }
+    post_info = {}
+    query_result = queries.feed_query(user)
+    for i in query_result:
+        curr = {
+            'name':i[6],
+            'id':i[0],
+            'message':i[1],
+            'location':i[2],
+            'tags':i[3],
+            'likes':i[4],
+            'dislikes':i[5]
+        }
+        post_info[i[0]] = curr
+    posts = post_info.keys()
     return render_template(
         'feed.html',
         posts=posts,
