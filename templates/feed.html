@@ -10,6 +10,16 @@
 	<body>
 		<div class = "header">Bebop</div>
 		<div class="container">
+			<form action="" method="post">
+				<label for="message">Message: </label>
+				<input type="text" placeholder="Message" name="message" value="{{ request.form.message }}"><br>
+				<label for="location">Location: </label>
+				<input type="text" placeholder="Location" name="location" value="{{ request.form.location }}">
+				<label for="tags">Tags: </label>
+				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}">
+
+				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
+			</form>
 			{% for post in posts %}
 			<div class = "post">
 				<div class = "post_header">
@@ -19,8 +29,13 @@
 					{{ post_info[post]['message'] }}
 				</div>
 				<div class = "interactions">
-					Likes: <span style="font-style: italic;font-weight: 300;">{{ post_info[post]['likes'] }}</span>
-					Dislikes: <span style="font-style: italic;font-weight: 300;">{{ post_info[post]['dislikes'] }}</span>
+					<form method ="post" action="">
+						<input type="hidden" id="postId" name="postId" value="{{ post }}">
+						<input class="btn btn-default" type="submit" name="Submit Type" value="Like">
+						<span style="font-style: italic;font-weight: 300;">{{ post_info[post]['likes'] }}</span>
+						<input class="btn btn-default" type="submit" name="Submit Type" value="Dislike">
+						<span style="font-style: italic;font-weight: 300;">{{ post_info[post]['dislikes'] }}</span>
+					</form> 
 				</div>
 			</div>
 			{% endfor %}

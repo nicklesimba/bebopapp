@@ -50,7 +50,7 @@ def login():
         return render_template('login.html', error=error)
 
 
-@app.route('/feed/<username>')
+@app.route('/feed/<username>', methods=['GET', 'POST'])
 def feed(username):
     post_info = {}
     query_result = queries.feed_query(username)
@@ -66,11 +66,27 @@ def feed(username):
         }
         post_info[i[0]] = curr
     posts = post_info.keys()
-    return render_template(
-        'feed.html',
-        posts=posts,
-        post_info=post_info
-    )
+
+    #When loading the page initially
+    if request.method == 'GET':
+        return render_template(
+            'feed.html',
+            posts=posts,
+            post_info=post_info
+        )
+    
+    #If it's a POST request, check which type of submit we did
+    if request.form["Submit Type"] == 'Make Post':
+        message = request.form.get('message')
+        location = request.form.get('location')
+        tags = request.form.get('tags')
+        queries.createpost(username, location, message, tags)
+    elif request.form['Submit Type'] == 'Like':
+        queries.likepost(username, request.form['postId'])
+    elif request.form['Submit Type'] == 'Dislike':
+        queries.likepost(username, request.form['postId'])
+    return redirect(url_for('feed', username=username))
+    
 
 if __name__ == '__main__':
     app.run()
