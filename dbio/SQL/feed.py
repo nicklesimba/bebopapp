@@ -178,7 +178,7 @@ def likepost(user, post_id):
                 """
                 cursor.execute(sql, (post_id, user))
                 sql = """
-                   UPDATE Posts
+                   UPDATE Posts p
                    SET dislikes = dislikes - 1
                    WHERE p.post_id = %s
                 """
@@ -277,7 +277,7 @@ def dislikepost(user, post_id):
                 """
                 cursor.execute(sql, (post_id, user))
                 sql = """
-                   UPDATE Posts
+                   UPDATE Posts p
                    SET likes = likes - 1
                    WHERE p.post_id = %s
                 """
