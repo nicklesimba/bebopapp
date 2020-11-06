@@ -135,7 +135,7 @@ def likepost(user, post_id):
     print(records)
     
     if len(records) > 0: # Post has been interacted with before
-        if records[0] == 1: # Post was already liked by the user, so unlike it
+        if records[0][0] == 1: # Post was already liked by the user, so unlike it
             print("Post was already liked - unliking post")
             # Decrement the likes in Posts
             sql = """
