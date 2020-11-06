@@ -34,7 +34,7 @@ def login():
         if valid:
             ## redirect to feed page with location information
             error = "Login worked: need to redirect"
-            return redirect(url_for('feed', username=username))
+            return redirect(url_for('feed', username=username, location=location))
             
         else:
             error = "Invalid Username or Password"
@@ -55,7 +55,7 @@ def login():
 
 
 @app.route('/feed/<username>', methods=['GET', 'POST'])
-def feed(username):
+def feed(username, location):
     post_info = {}
     query_result = queries.feed_query(username)
     for i in query_result:
@@ -82,9 +82,10 @@ def feed(username):
     #If it's a POST request, check which type of submit we did
     if request.form["Submit Type"] == 'Make Post':
         message = request.form.get('message')
-        location = request.form.get('location')
+        post_location = location
+        # location = request.form.get('location')
         tags = request.form.get('tags')
-        queries.createpost(username, location, message, tags)
+        queries.createpost(username, post_location, message, tags)
         
     elif request.form['Submit Type'] == 'Like':
         queries.likepost(username, request.form['postId'])
