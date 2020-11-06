@@ -22,15 +22,24 @@ def feed_query(user):
     # 1. query based on user, grab posts that are visible to them
 	
     # Query the feed based on the location of the user which can be passed in
- 
+    
+    ## This function is not fully implemented yet - it will display all the messages in the DB for now
+    '''
     sql = """
         SELECT post_id, post_message, location, tags, likes, dislikes, u.username
         FROM Posts p NATURAL JOIN Users u
         WHERE u.username = %s
         ORDER BY post_id
     """
+    '''
+    # number of rows = cursor.execute(sql, (user,))
+    sql = """
+        SELECT post_id, post_message, location, tags, likes, dislikes, author
+        FROM Posts p
+        ORDER BY post_id
+    """
 
-    number_of_rows = cursor.execute(sql, (user,))
+    number_of_rows = cursor.execute(sql)
     records = cursor.fetchall()
     print("Feed Query Records")
     print(records)

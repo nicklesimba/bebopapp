@@ -85,10 +85,13 @@ def feed(username):
         location = request.form.get('location')
         tags = request.form.get('tags')
         queries.createpost(username, location, message, tags)
+        
     elif request.form['Submit Type'] == 'Like':
         queries.likepost(username, request.form['postId'])
+        
     elif request.form['Submit Type'] == 'Dislike':
         queries.likepost(username, request.form['postId'])
+        
     return redirect(url_for('feed', username=username))
     
 
