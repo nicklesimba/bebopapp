@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import MySQLdb as my
+import mysql.connector as my
 
 db = my.connect(
     host="localhost", 
