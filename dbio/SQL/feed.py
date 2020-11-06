@@ -128,7 +128,7 @@ def likepost(user, post_id):
     records = cursor.fetchall()
     
     if len(records) > 0: # Post has been interacted with before
-        if records[0]: # Post was already liked by the user, so unlike it
+        if records[0][0] == 1: # Post was already liked by the user, so unlike it
             # Decrement the likes in Posts
             sql = """
                UPDATE Posts p
@@ -207,7 +207,7 @@ def dislikepost(user, post_id):
     records = cursor.fetchall()
     
     if len(records) > 0: # Post has been interacted with before
-        if records[0]: # Post was already disliked by the user, so remove dislike
+        if records[0][0] == 1: # Post was already disliked by the user, so remove dislike
             # Decrement the dislikes in Posts
             sql = """
                UPDATE Posts p
