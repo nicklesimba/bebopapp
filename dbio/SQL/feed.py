@@ -145,7 +145,6 @@ def likepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
-            db.commit() # added 
             
         else: # Post has not been liked by the user
             # Increment the likes in Posts
@@ -163,8 +162,29 @@ def likepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
-            db.commit() # added 
-            
+            ## Check if the user has also disliked the post, if so - remove their dislike and decrement the total dislikes
+            sql = """
+                SELECT disliked
+                FROM Post_Interaction
+                WHERE post_id = %s AND username = %s
+            """
+            cursor.execute(sql, (post_id, user))
+            records = cursor.fetchall()
+            if len(records) > 0:
+                sql = """
+                   UPDATE Post_Interaction
+                   SET disliked = 0
+                   WHERE post_id = %s AND username = %s
+                """
+                cursor.execute(sql, (post_id, user))
+                sql = """
+                   UPDATE Posts
+                   SET dislikes = dislikes - 1
+                   WHERE p.post_id = %s
+                """
+                cursor.execute(sql, (post_id,))
+                
+                 
     else: # Post has not been interacted with until now
         # Increment the likes in Posts
         sql = """
@@ -181,9 +201,8 @@ def likepost(user, post_id):
         """
         cursor.execute(sql, (post_id, user))
         
-        db.commit() # added
-        
     db.commit()
+       
     cursor.close()
     db.close()
     
@@ -196,7 +215,7 @@ def dislikepost(user, post_id):
     )
     cursor = db.cursor(prepared=True)
 
-    # check status of whether user has liked this post or not.
+    # check status of whether user has disliked this post or not.
     sql = """
         SELECT disliked
         FROM Post_Interaction
@@ -224,7 +243,6 @@ def dislikepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
-            db.commit() # added 
             
         else: # Post has not been disliked by the user
             # Increment the disliked in Posts
@@ -243,7 +261,28 @@ def dislikepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
-            db.commit() # added 
+            ## Check if the user has also liked the post, if so - remove their like and decrement the total likes
+            sql = """
+                SELECT liked
+                FROM Post_Interaction
+                WHERE post_id = %s AND username = %s
+            """
+            cursor.execute(sql, (post_id, user))
+            records = cursor.fetchall()
+            if len(records) > 0:
+                sql = """
+                   UPDATE Post_Interaction
+                   SET liked = 0
+                   WHERE post_id = %s AND username = %s
+                """
+                cursor.execute(sql, (post_id, user))
+                sql = """
+                   UPDATE Posts
+                   SET likes = likes - 1
+                   WHERE p.post_id = %s
+                """
+                cursor.execute(sql, (post_id,))
+            
             
     else: # Post has not been interacted with until now
         # Increment the dislikes in Posts
@@ -261,7 +300,6 @@ def dislikepost(user, post_id):
         """
         cursor.execute(sql, (post_id, user))
         
-        db.commit() # added
         
     db.commit()
     cursor.close()
