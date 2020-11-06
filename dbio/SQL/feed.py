@@ -124,31 +124,47 @@ def likepost(user, post_id):
     sql = """
         SELECT liked
         FROM Post_Interaction
-        WHERE post_id = %s
+        WHERE post_id = %s AND username = %s
     """
 
-    cursor.execute(sql, (post_id,))
+    cursor.execute(sql, (post_id, user))
     records = cursor.fetchall() # this and the following if statement may need work, idk if i'm accessing the value correctly!
+    print('YO MY RECORDS ARE:')    
     print(records)    
-    if len(records) > 0 and records[0] == 1: # is the post already liked? unlike it
-        # leaving out reply_ids because it's a new post. Post 
-        sql = """
-            UPDATE Posts p
-            SET likes = likes - 1
-            WHERE p.post_id = %s
-        """
 
-        cursor.execute(sql, (post_id,))
+    if len(records) > 0: #We've interacted with this post before
+        if records[0] == 1: #It's currently liked, need to unlike it
+            print('I have liked this post!')
+            sql = """
+               UPDATE Posts p
+               SET likes = likes - 1
+               WHERE p.post_id = %s
+            """
+            cursor.execute(sql, (post_id,))
 
-        # user has marked post as liked, can't like it again
-        sql = """
-            UPDATE Post_Interaction
-            SET liked = 0
-        """
+            # user has marked post as liked, can't like it again
+            sql = """
+                UPDATE Post_Interaction
+                SET liked = 0
+	        WHERE post_id = %s AND username = %s
+            """
+            cursor.execute(sql, (post_id, user))
+        else:
+            #Post is not liked, need to like 
+            sql = """
+                UPDATE Posts p
+                SET likes = likes + 1
+                WHERE p.post_id = %s
+            """
+            cursor.execute(sql, (post_id,))
 
-        cursor.execute(sql, (post_id,))
-    else:              # is the post unliked? like it
-        # leaving out reply_ids because it's a new post. Post 
+            sql = """
+                UPDATE Post_Interaction
+                SET liked = 1
+		WHERE post_id = %s AND username = %s
+            """
+            cursor.execute(sql, (post_id, user))
+    else:              #Has this post never been liked
         sql = """
             UPDATE Posts p
             SET likes = likes + 1
@@ -156,15 +172,14 @@ def likepost(user, post_id):
         """
 
         cursor.execute(sql, (post_id,))
-
-        # user has marked post as liked, can't like it again
+	
+        #User likes the post for the first time
         sql = """
-            UPDATE Post_Interaction
-            SET liked = 1
+            INSERT INTO Post_Interaction (post_id, username, liked, disliked)
+            VALUES (%s, %s, 1, 0)
         """
 
-        cursor.execute(sql, post_id)
-
+        cursor.execute(sql, (post_id, user))
     db.commit()
     cursor.close()
     db.close()
