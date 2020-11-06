@@ -15,9 +15,9 @@ def feed_query(user):
         user="bebop26dmnr_nicklesimba", 
         password="Yareyaredaze2643"  
     )
-    print(db)
+    # print(db)
     cursor = db.cursor(prepared=True)
-    print(cursor)
+    # print(cursor)
 
     # 1. query based on user, grab posts that are visible to them
 	
@@ -32,6 +32,7 @@ def feed_query(user):
 
     number_of_rows = cursor.execute(sql, (user,))
     records = cursor.fetchall()
+    print("Feed Query Records")
     print(records)
 
 
@@ -52,9 +53,9 @@ def createpost(user, location, post_message, tags):
         user="bebop26dmnr_nicklesimba", 
         password="Yareyaredaze2643"  
     )
-    print(db)
+    # print(db)
     cursor = db.cursor(prepared=True)
-    print(cursor)
+    # print(cursor)
 
     post_id = int(calendar.timegm(time.gmtime()))
     
@@ -66,7 +67,6 @@ def createpost(user, location, post_message, tags):
     query_tuple = (post_id, user, location, post_message, tags)
 
     number_of_rows = cursor.execute(sql, query_tuple)
-    print(number_of_rows)
 
     db.commit()
     cursor.close()
@@ -84,9 +84,9 @@ def deletepost(user, post_id):
         user="bebop26dmnr_nicklesimba", 
         password="Yareyaredaze2643"  
     )
-    print(db)
+    # print(db)
     cursor = db.cursor(prepared=True)
-    print(cursor)
+    # print(cursor)
     
     # leaving out reply_ids because it's a new post. Post 
     sql = """
@@ -116,9 +116,9 @@ def likepost(user, post_id):
         user="bebop26dmnr_nicklesimba", 
         password="Yareyaredaze2643"  
     )
-    print(db)
+    # print(db)
     cursor = db.cursor(prepared=True)
-    print(cursor)
+    # print(cursor)
 
     # check status of whether user has liked this post or not.
     sql = """
@@ -129,7 +129,7 @@ def likepost(user, post_id):
 
     cursor.execute(sql, (post_id, user))
     records = cursor.fetchall() # this and the following if statement may need work, idk if i'm accessing the value correctly!
-    print('YO MY RECORDS ARE:')    
+    print('Like Post Records')    
     print(records)    
 
     if len(records) > 0: #We've interacted with this post before
