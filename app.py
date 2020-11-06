@@ -54,7 +54,7 @@ def login():
         return render_template('login.html', error=error)
 
 
-@app.route('/feed/<username>', methods=['GET', 'POST'])
+@app.route('/feed/<username>/<location>', methods=['GET', 'POST'])
 def feed(username, location):
     post_info = {}
     query_result = queries.feed_query(username)
