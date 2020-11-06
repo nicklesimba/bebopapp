@@ -184,9 +184,9 @@ def likepost(user, post_id):
     cursor.close()
     db.close()
 
-# test area
+##  TEST AREA
 # run only one createpost at a time for now.
 # createpost("nicklesimba", "Champaign", "ayo", "")
 # createpost("someUser123", "Champaign", "what's goooood?", "test")
-frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
-print(frontend_code)
+# frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
+# print(frontend_code)
