@@ -108,11 +108,6 @@ def deletepost(user, post_id):
     cursor.close()
     db.close()
 
-# func - deletepost
-# desc - takes in a username and post_id, then deletes Post and Posted_By entry
-# args - user - the current user
-#        post_id - the timestamp of the post that should be deleted
-# ret  - N/A, just updates db table Post and Posted_By
 def likepost(user, post_id):
     db = my.connect(
         host="localhost",
@@ -131,12 +126,9 @@ def likepost(user, post_id):
 
     cursor.execute(sql, (post_id, user))
     records = cursor.fetchall()
-    print("Printing post_interaction record")
-    print(records)
     
     if len(records) > 0: # Post has been interacted with before
-        if records[0][0] == 1: # Post was already liked by the user, so unlike it
-            print("Post was already liked - unliking post")
+        if records[0]: # Post was already liked by the user, so unlike it
             # Decrement the likes in Posts
             sql = """
                UPDATE Posts p
@@ -157,7 +149,6 @@ def likepost(user, post_id):
             
         else: # Post has not been liked by the user
             # Increment the likes in Posts
-            print("Post has been interacted with before, but not liked currently - liking post")
             sql = """
                UPDATE Posts p
                SET likes = likes + 1
@@ -176,7 +167,6 @@ def likepost(user, post_id):
             
     else: # Post has not been interacted with until now
         # Increment the likes in Posts
-        print("Post has never been interacted with before - liking post")
         sql = """
            UPDATE Posts p
            SET likes = likes + 1
@@ -188,6 +178,86 @@ def likepost(user, post_id):
         sql = """
             INSERT INTO Post_Interaction (post_id, username, liked, disliked)
             VALUES (%s, %s, 1, 0)
+        """
+        cursor.execute(sql, (post_id, user))
+        
+        db.commit() # added
+        
+    db.commit()
+    cursor.close()
+    db.close()
+    
+def dislikepost(user, post_id):
+    db = my.connect(
+        host="localhost",
+        database="bebop26dmnr_db", 
+        user="bebop26dmnr_nicklesimba", 
+        password="Yareyaredaze2643"  
+    )
+    cursor = db.cursor(prepared=True)
+
+    # check status of whether user has liked this post or not.
+    sql = """
+        SELECT disliked
+        FROM Post_Interaction
+        WHERE post_id = %s AND username = %s
+    """
+
+    cursor.execute(sql, (post_id, user))
+    records = cursor.fetchall()
+    
+    if len(records) > 0: # Post has been interacted with before
+        if records[0]: # Post was already disliked by the user, so remove dislike
+            # Decrement the dislikes in Posts
+            sql = """
+               UPDATE Posts p
+               SET dislikes = dislikes - 1
+               WHERE p.post_id = %s
+            """
+            cursor.execute(sql, (post_id,))
+
+            # Remove dislike of the post in Post_Interaction
+            sql = """
+               UPDATE Post_Interaction
+               SET disliked = 0
+	           WHERE post_id = %s AND username = %s
+            """
+            cursor.execute(sql, (post_id, user))
+            
+            db.commit() # added 
+            
+        else: # Post has not been disliked by the user
+            # Increment the disliked in Posts
+            print("Post has been interacted with before, but not liked currently - liking post")
+            sql = """
+               UPDATE Posts p
+               SET dislikes = dislikes + 1
+               WHERE p.post_id = %s
+            """
+            cursor.execute(sql, (post_id,))
+
+            sql = """
+               UPDATE Post_Interaction
+               SET disliked = 1
+               WHERE post_id = %s AND username = %s
+            """
+            cursor.execute(sql, (post_id, user))
+            
+            db.commit() # added 
+            
+    else: # Post has not been interacted with until now
+        # Increment the dislikes in Posts
+        sql = """
+           UPDATE Posts p
+           SET dislikes = dislikes + 1
+           WHERE p.post_id = %s
+        """
+        cursor.execute(sql, (post_id,))
+	
+        # User dislikes the post for the first time
+        sql = """
+            INSERT INTO Post_Interaction (post_id, username, liked, disliked)
+            VALUES (%s, %s, 0, 1)
         """
         cursor.execute(sql, (post_id, user))
         

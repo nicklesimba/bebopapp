@@ -91,7 +91,7 @@ def feed(username, location):
         
     elif request.form['Submit Type'] == 'Dislike':
         print("Current user dislked a post")
-        queries.likepost(username, request.form['postId'])
+        queries.dislikepost(username, request.form['postId'])
         
     return redirect(url_for('feed', username=username, location=location))
     
