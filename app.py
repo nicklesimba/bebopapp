@@ -95,7 +95,7 @@ def feed(username, location):
     
     elif request.form['Submit Type'] == 'Delete':
         print("Current user deleted a post")
-        queries.dislikepost(username, request.form['postId'])
+        queries.deletepost(username, request.form['postId'])
         
     return redirect(url_for('feed', username=username, location=location))
     

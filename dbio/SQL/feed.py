@@ -88,19 +88,10 @@ def deletepost(user, post_id):
         user="bebop26dmnr_nicklesimba", 
         password="Yareyaredaze2643"  
     )
-    # print(db)
     cursor = db.cursor(prepared=True)
-    # print(cursor)
     
-    # leaving out reply_ids because it's a new post. Post 
     sql = """
         DELETE FROM Posts WHERE post_id = %s
-    """
-    cursor.execute(sql, (post_id,))
-
-    # Also need to incorporate posted_by relation
-    sql = """
-        DELETE FROM Posted_By WHERE post_id = %s
     """
     cursor.execute(sql, (post_id,))
 
