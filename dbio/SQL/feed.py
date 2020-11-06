@@ -130,12 +130,11 @@ def likepost(user, post_id):
     """
 
     cursor.execute(sql, (post_id, user))
-    records = cursor.fetchall()
-    print('Like Post Records')
-    print(records)    
+    records = cursor.fetchall()    
 
     if len(records) > 0: # Post has been interacted with before
         if records[0] == 1: # Post was already liked by the user, so unlike it
+            print("Post was already liked - unliking post")
             # Decrement the likes in Posts
             sql = """
                UPDATE Posts p
@@ -151,8 +150,12 @@ def likepost(user, post_id):
 	           WHERE post_id = %s AND username = %s
             """
             cursor.execute(sql, (post_id, user))
+            
+            db.commit() # added 
+            
         else: # Post has not been liked by the user
             # Increment the likes in Posts
+            print("Post has interacted with before, but not liked currently - liking post")
             sql = """
                UPDATE Posts p
                SET likes = likes + 1
@@ -167,8 +170,11 @@ def likepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
+            db.commit() # added 
+            
     else: # Post has not been interacted with until now
         # Increment the likes in Posts
+        print("Post has never been interacted with before - liking post")
         sql = """
            UPDATE Posts p
            SET likes = likes + 1
@@ -182,6 +188,8 @@ def likepost(user, post_id):
             VALUES (%s, %s, 1, 0)
         """
         cursor.execute(sql, (post_id, user))
+        
+        db.commit() # added
         
     db.commit()
     cursor.close()
