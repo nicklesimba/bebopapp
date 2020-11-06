@@ -19,7 +19,9 @@ def feed_query(user):
     print(cursor)
 
     # 1. query based on user, grab posts that are visible to them
-
+	
+    # Query the feed based on the location of the user which can be passed in
+ 
     sql = """
         SELECT post_id, post_message, location, tags, likes, dislikes, u.username
         FROM Posts p NATURAL JOIN Users u
