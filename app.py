@@ -71,7 +71,6 @@ def feed(username, location):
         post_info[i[0]] = curr
     posts = post_info.keys()
 
-    #When loading the page initially
     if request.method == 'GET':
         return render_template(
             'feed.html',
@@ -79,21 +78,22 @@ def feed(username, location):
             post_info=post_info
         )
     
-    #If it's a POST request, check which type of submit we did
     if request.form["Submit Type"] == 'Make Post':
+        print("Current user created a post")
         message = request.form.get('message')
         post_location = location
-        # location = request.form.get('location')
         tags = request.form.get('tags')
         queries.createpost(username, post_location, message, tags)
         
     elif request.form['Submit Type'] == 'Like':
+        print("Current user liked a post")
         queries.likepost(username, request.form['postId'])
         
     elif request.form['Submit Type'] == 'Dislike':
+        print("Current user dislked a post")
         queries.likepost(username, request.form['postId'])
         
-    return redirect(url_for('feed', username=username))
+    return redirect(url_for('feed', username=username, location=location))
     
 
 if __name__ == '__main__':
