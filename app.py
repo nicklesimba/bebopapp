@@ -10,6 +10,10 @@ static_path = os.path.join(project_root, 'static')
 app = Flask(__name__, template_folder=template_path, static_folder=static_path)
 
 
+def _byte_decode(text):
+	return text.decode(encoding='UTF-8')
+
+
 @app.route('/')
 def index():
     return ' test world!'
@@ -56,11 +60,11 @@ def feed(username):
     query_result = queries.feed_query(username)
     for i in query_result:
         curr = {
-            'name':i[6],
+            'name':_byte_decode(i[6]),
             'id':i[0],
-            'message':i[1],
-            'location':i[2],
-            'tags':i[3],
+            'message':_byte_decode(i[1]),
+            'location':_byte_decode(i[2]),
+            'tags':_byte_decode(i[3]),
             'likes':i[4],
             'dislikes':i[5]
         }

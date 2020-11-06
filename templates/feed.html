@@ -10,13 +10,14 @@
 	<body>
 		<div class = "header">Bebop</div>
 		<div class="container">
-			<form action="" method="post">
+			<form action="" method="post" class="login_form">
+				What's on your mind... <br>
 				<label for="message">Message: </label>
 				<input type="text" placeholder="Message" name="message" value="{{ request.form.message }}"><br>
 				<label for="location">Location: </label>
-				<input type="text" placeholder="Location" name="location" value="{{ request.form.location }}">
+				<input type="text" placeholder="Location" name="location" value="{{ request.form.location }}"><br>
 				<label for="tags">Tags: </label>
-				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}">
+				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}"><br>
 
 				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
 			</form>

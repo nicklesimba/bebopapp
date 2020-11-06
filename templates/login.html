@@ -3,12 +3,13 @@
     <title>Bebop Login/Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='styles.css') }}">
   </head>
   <body>
-    <div class="container">
-      <h1>Welcome to Bebop! Please Login or Register</h1>
+    <div class="login_container">
+      <div class="header_login">Welcome to Bebop! Please Login or Register</div>
       <br>
-      <form action="" method="post">
+      <form class="login_form" action="" method="post">
         <label for="username">Username: </label>
         <input type="text" placeholder="Username" name="username" value="{{request.form.username}}"><br>
         
