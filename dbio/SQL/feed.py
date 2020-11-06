@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import calendar
 import mysql.connector as my
 import time
 
@@ -55,24 +56,14 @@ def createpost(user, location, post_message, tags):
     cursor = db.cursor(prepared=True)
     print(cursor)
 
-    post_id = time.time()
+    post_id = int(calendar.timegm(time.gmtime()))
     
     # leaving out reply_ids because it's a new post.
     sql = """
-        INSERT INTO Posts (post_id, location, post_message, tags, reply_ids, likes, dislikes) 
-        VALUES (%s, %s, %s, %s, "", 0, 0)
+        INSERT INTO Posts (post_id, author, location, post_message, tags, reply_ids, likes, dislikes) 
+        VALUES (%s, %s, %s, %s, %s, "", 0, 0)
     """
-    query_tuple = (post_id, location, post_message, tags)
-
-    number_of_rows = cursor.execute(sql, query_tuple)
-    print(number_of_rows)
-
-    # Also need to incorporate posted_by relation
-    sql = """
-        INSERT INTO Posted_By (post_id, username) 
-        VALUES (%s, %s)
-    """
-    query_tuple = (post_id, user)
+    query_tuple = (post_id, user, location, post_message, tags)
 
     number_of_rows = cursor.execute(sql, query_tuple)
     print(number_of_rows)
@@ -136,13 +127,13 @@ def likepost(user, post_id):
         WHERE post_id = %s
     """
 
-    execute(sql, (post_id,))
+    cursor.execute(sql, (post_id,))
     records = cursor.fetchall() # this and the following if statement may need work, idk if i'm accessing the value correctly!
-    
-    if records[0] == 1: # is the post already liked? unlike it
+    print(records)    
+    if len(records) > 0 and records[0] == 1: # is the post already liked? unlike it
         # leaving out reply_ids because it's a new post. Post 
         sql = """
-            UPDATE Post p
+            UPDATE Posts p
             SET likes = likes - 1
             WHERE p.post_id = %s
         """
@@ -159,8 +150,9 @@ def likepost(user, post_id):
     else:              # is the post unliked? like it
         # leaving out reply_ids because it's a new post. Post 
         sql = """
-            UPDATE Post
+            UPDATE Posts p
             SET likes = likes + 1
+	    WHERE p.post_id = %s
         """
 
         cursor.execute(sql, (post_id,))
