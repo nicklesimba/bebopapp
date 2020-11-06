@@ -12,8 +12,7 @@ db = my.connect(
 cursor = db.cursor()
 
 clear_post_interacts = """
-   DELETE *
-   FROM Post_Interaction
+   DELETE FROM Post_Interaction
 """
 
 number_of_rows = cursor.execute(clear_post_interacts)
