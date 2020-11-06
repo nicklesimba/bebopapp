@@ -33,7 +33,6 @@ def login():
         valid = users.check_login(username, password)
         if valid:
             ## redirect to feed page with location information
-            error = "Login worked: need to redirect"
             return redirect(url_for('feed', username=username, location=location))
             
         else:
@@ -43,8 +42,8 @@ def login():
     elif 'Register' in request.form:
         try:
             users.create_user(username, password, location)
-            error = "Registration worked: need to redirect"
-            return render_template('login.html', error=error)
+            return redirect(url_for('feed', username=username, location=location))
+            
         except (TypeError, RuntimeError) as e:
             error = e.args[0]
             return render_template('login.html', error=error)
@@ -75,7 +74,8 @@ def feed(username, location):
         return render_template(
             'feed.html',
             posts=posts,
-            post_info=post_info
+            post_info=post_info,
+            curr_user=username
         )
     
     if request.form["Submit Type"] == 'Make Post':
@@ -91,6 +91,10 @@ def feed(username, location):
         
     elif request.form['Submit Type'] == 'Dislike':
         print("Current user dislked a post")
+        queries.dislikepost(username, request.form['postId'])
+    
+    elif request.form['Submit Type'] == 'Delete':
+        print("Current user deleted a post")
         queries.dislikepost(username, request.form['postId'])
         
     return redirect(url_for('feed', username=username, location=location))
