@@ -33,23 +33,25 @@ def feed_query(user):
     # number of rows = cursor.execute(sql, (user,))
 
     sql = """
-        SELECT location
+        SELECT DISTINCT locations
         FROM Users
         WHERE username = %s
     """
 
-    cursor.execute(sql)
-    user_loc = cursor.fetchall()
+    cursor.execute(sql, (user,))
+    user_loc = cursor.fetchone()
+    string_user_loc = user_loc[0].decode()
+    print(string_user_loc)
 
     ## This code is being used for the demo
     sql = """
         SELECT post_id, post_message, location, tags, likes, dislikes, author
         FROM Posts p
-        WHERE location = %s
+        WHERE p.location = %s
         ORDER BY post_id
     """
 
-    number_of_rows = cursor.execute(sql, (user_loc,))
+    number_of_rows = cursor.execute(sql, (string_user_loc,))
     records = cursor.fetchall()
 
 
@@ -312,3 +314,4 @@ def dislikepost(user, post_id):
 # createpost("someUser123", "Champaign", "what's goooood?", "test")
 # frontend_code = feed_query("nicklesimba") # more frontend code would follow to format and display it
 # print(frontend_code)
+feed_query("nicklesimba")
