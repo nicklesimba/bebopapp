@@ -31,15 +31,25 @@ def feed_query(user):
     """
     '''
     # number of rows = cursor.execute(sql, (user,))
-    
+
+    sql = """
+        SELECT location
+        FROM Users
+        WHERE username = %s
+    """
+
+    cursor.execute(sql)
+    user_loc = cursor.fetchall()
+
     ## This code is being used for the demo
     sql = """
         SELECT post_id, post_message, location, tags, likes, dislikes, author
         FROM Posts p
+        WHERE location = %s
         ORDER BY post_id
     """
 
-    number_of_rows = cursor.execute(sql)
+    number_of_rows = cursor.execute(sql, (user_loc,))
     records = cursor.fetchall()
 
 
