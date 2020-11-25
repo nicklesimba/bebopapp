@@ -165,25 +165,26 @@ def likepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
-            ## Check if the user has also disliked the post, if so - remove their dislike and decrement the total dislikes
-            sql = """
-                SELECT disliked
-                FROM Post_Interaction
-                WHERE post_id = %s AND username = %s
-            """
-            cursor.execute(sql, (post_id, user))
-            records = cursor.fetchall()
-            if len(records) > 0:
+        ## Check if the user has also disliked the post, if so - remove their dislike and decrement the total dislikes
+        sql = """
+            SELECT disliked
+            FROM Post_Interaction
+            WHERE post_id = %s AND username = %s
+        """
+        cursor.execute(sql, (post_id, user))
+        records = cursor.fetchall()
+        if len(records) > 0:
+            if records[0][0] == 1: # Post was already disliked by the user, so remove dislike
                 sql = """
-                   UPDATE Post_Interaction
-                   SET disliked = 0
-                   WHERE post_id = %s AND username = %s
+                    UPDATE Post_Interaction
+                    SET disliked = 0
+                    WHERE post_id = %s AND username = %s
                 """
                 cursor.execute(sql, (post_id, user))
                 sql = """
-                   UPDATE Posts p
-                   SET dislikes = dislikes - 1
-                   WHERE p.post_id = %s
+                    UPDATE Posts p
+                    SET dislikes = dislikes - 1
+                    WHERE p.post_id = %s
                 """
                 cursor.execute(sql, (post_id,))
                 
@@ -204,8 +205,8 @@ def likepost(user, post_id):
         """
         cursor.execute(sql, (post_id, user))
         
+    
     db.commit()
-       
     cursor.close()
     db.close()
     
@@ -264,25 +265,26 @@ def dislikepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
-            ## Check if the user has also liked the post, if so - remove their like and decrement the total likes
-            sql = """
-                SELECT liked
-                FROM Post_Interaction
-                WHERE post_id = %s AND username = %s
-            """
-            cursor.execute(sql, (post_id, user))
-            records = cursor.fetchall()
-            if len(records) > 0:
+        ## Check if the user has also liked the post, if so - remove their like and decrement the total likes
+        sql = """
+            SELECT liked
+            FROM Post_Interaction
+            WHERE post_id = %s AND username = %s
+        """
+        cursor.execute(sql, (post_id, user))
+        records = cursor.fetchall()
+        if len(records) > 0:
+            if records[0][0] == 1: # Post was already liked by the user, so remove like
                 sql = """
-                   UPDATE Post_Interaction
-                   SET liked = 0
-                   WHERE post_id = %s AND username = %s
+                    UPDATE Post_Interaction
+                    SET liked = 0
+                    WHERE post_id = %s AND username = %s
                 """
                 cursor.execute(sql, (post_id, user))
                 sql = """
-                   UPDATE Posts p
-                   SET likes = likes - 1
-                   WHERE p.post_id = %s
+                    UPDATE Posts p
+                    SET likes = likes - 1
+                    WHERE p.post_id = %s
                 """
                 cursor.execute(sql, (post_id,))
             
