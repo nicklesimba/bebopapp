@@ -106,7 +106,7 @@ def feed(username, location):
     elif request.form['Submit Type'] == 'View Replies':
         print("Current user is viewing a post's replies")
         print(request.form['postId'])
-        redirect(url_for('comments_feed', username=username, location=location, postid=request.form['postId']))
+        return redirect(url_for('comments_feed', username=username, location=location, postid=request.form['postId']))
         
     return redirect(url_for('feed', username=username, location=location))
     
@@ -149,13 +149,15 @@ def comments_feed(username, location, postid):
     
     elif request.form['Submit Type'] == 'Like':
         print("Current user liked a reply to a post")
+        queries.likecomment(username, request.form['commentId'])
     
     elif request.form['Submit Type'] == "Dislike":
         print("Current user disliked a reply to a post")
+        queries.dislikecomment(username, request.form['commentId'])
     
     elif request.form['Submit Type'] == "Delete":
         print("Current user deleted their reply to a post")
-        queries.deletecomment(request.form[commentId])
+        queries.deletecomment(request.form['commentId'])
         
     ## elif implement a button to go back to the feed
     
