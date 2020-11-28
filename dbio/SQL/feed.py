@@ -153,7 +153,7 @@ def createcomment(postid, user, message):
     """
     query_tuple = (postid, comment_id, user, message)
     
-    number_of_rows = cursor.execuite(sql, query_tuple)
+    number_of_rows = cursor.execute(sql, query_tuple)
     
     db.commit()
     cursor.close()
