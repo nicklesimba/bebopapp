@@ -48,7 +48,7 @@ def feed_query(user):
         SELECT post_id, post_message, location, tags, likes, dislikes, author
         FROM Posts p
         WHERE p.location = %s
-        ORDER BY post_id
+        ORDER BY post_id DESC
     """
 
     number_of_rows = cursor.execute(sql, (string_user_loc,))
@@ -76,7 +76,7 @@ def comments_feed_query(postid, order_type):
     SELECT comment_id, author, comment_message, likes, dislikes
     FROM Comments c
     WHERE c.post_id = %s
-    ORDER BY %s
+    ORDER BY %s DESC
     """
 
     number_of_rows = cursor.execute(sql, (postid, order_type))
