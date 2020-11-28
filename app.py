@@ -102,9 +102,5 @@ def feed(username, location):
     return redirect(url_for('feed', username=username, location=location))
     
 
-@app.route('/feed/<username>', methods=['GET', 'POST'])
-def user_info(username, location):
-
-
 if __name__ == '__main__':
     app.run()
