@@ -18,7 +18,7 @@ def _byte_decode(text):
 def index():
     return ' test world!'
     
-
+# login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -52,7 +52,7 @@ def login():
         error = "Something went wrong"
         return render_template('login.html', error=error)
 
-
+# user feed
 @app.route('/feed/<username>/<location>', methods=['GET', 'POST'])
 def feed(username, location):
     post_info = {}
@@ -97,7 +97,68 @@ def feed(username, location):
         print("Current user deleted a post")
         queries.deletepost(username, request.form['postId'])
         
+    elif request.form['Submit Type'] == "View Replies':
+        print("Current user is viewing a post's replies")
+        print(request.form['postId'])
+        redirect(url_for('comments_feed', username=username, location=location, postid=request.form['postId']))
+        
     return redirect(url_for('feed', username=username, location=location))
+    
+# view replies
+@app.route('/feed/<username>/<location>/<postid>' methods=['GET', 'POST'])
+def comments_feed(username, location, postid):
+    ## load the replies based on postid
+    comment_info = {}
+    query_result = queries.comments_feed_query(postid)
+    for i in query_result:
+        curr = {
+            'name' = _byte_decode(i[1])
+            'id' = i[0]
+            'message' = _byte_decode(i[2])
+            'likes' = i[3]
+            'dislikes' = i[4]
+        }
+        comment_info[i[0]] = curr
+    comments = comment_info.keys()
+    
+    ## gets the information of the post whose replies you wanted to see
+    original = queries.post_info_query(postid)
+    original_post_author = _byte_decode(original[0])
+    original_post_message = _byte_decode(original[1])
+    
+    if request.method == 'GET':
+        return render_template(
+            'comment_feed.html',
+            author=original_post_author,
+            message=original_post_message,
+            comments=comments
+            comment_info=comment_info,
+            curr_user=username
+        )
+    
+    if request.form['Submit Type'] == 'Make Reply':
+        print("Current user is replying to a post")
+        message = request.form.get('message')
+        queries.createcomment(postid, username, message)
+    
+    elif request.form['Submit Type'] == 'Like':
+        print("Current user liked a reply to a post")
+    
+    elif request.form['Submit Type'] == "Dislike":
+        print("Current user disliked a reply to a post")
+    
+    elif request.form['Submit Type'] == "Delete":
+        print("Current user deleted their reply to a post")
+        
+        queries.deletecomment(request.form[commentId])
+        
+    ## elif implement a button to go back to the feed
+    
+    return redirect(url_for('comments_feed', username=username, location=location, postid=postid))
+        
+## view all the previous replies
+## need to be able to create a reply
+## need to be able to go back to the feed
     
 
 if __name__ == '__main__':
