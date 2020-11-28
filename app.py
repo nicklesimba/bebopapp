@@ -105,18 +105,18 @@ def feed(username, location):
     return redirect(url_for('feed', username=username, location=location))
     
 # view replies
-@app.route('/feed/<username>/<location>/<postid>' methods=['GET', 'POST'])
+@app.route('/feed/<username>/<location>/<postid>', methods=['GET', 'POST'])
 def comments_feed(username, location, postid):
     ## load the replies based on postid
     comment_info = {}
     query_result = queries.comments_feed_query(postid)
     for i in query_result:
         curr = {
-            'name' = _byte_decode(i[1])
-            'id' = i[0]
-            'message' = _byte_decode(i[2])
-            'likes' = i[3]
-            'dislikes' = i[4]
+            'name': _byte_decode(i[1]),
+            'id': i[0],
+            'message': _byte_decode(i[2]),
+            'likes': i[3],
+            'dislikes': i[4]
         }
         comment_info[i[0]] = curr
     comments = comment_info.keys()
@@ -131,7 +131,7 @@ def comments_feed(username, location, postid):
             'comment_feed.html',
             author=original_post_author,
             message=original_post_message,
-            comments=comments
+            comments=comments,
             comment_info=comment_info,
             curr_user=username
         )
