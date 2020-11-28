@@ -10,13 +10,15 @@
 	<body>
 		<div class = "header">Bebop</div>
 		<div class="container">
+			<form method="post">
+				<input class="btn btn-default" type="submit" name="Submit Type" value="My Info">
+			</form>
 			<form action="" method="post" class="login_form">
 				What's on your mind... <br>
 				<label for="message">Message: </label>
 				<input type="text" placeholder="Message" name="message" value="{{ request.form.message }}"><br>
 				<label for="tags">Tags: </label>
 				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}"><br>
-
 				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
 			</form>
 			{% for post in posts %}

@@ -98,9 +98,19 @@ def feed(username, location):
     elif request.form['Submit Type'] == 'Delete':
         print("Current user deleted a post")
         queries.deletepost(username, request.form['postId'])
+    
+    elif request.form['Submit Type'] == 'My Info':
+        return redirect(url_for('user_page', username=username, location=location))
         
     return redirect(url_for('feed', username=username, location=location))
     
+
+@app.route('/feed/<username>', methods=['GET', 'POST'])
+def user_page(username, location):
+    if request.method == 'GET':
+        return render_template('user.html', username=username, location=location)
+    if request.form['Submit Type'] == 'Back':
+        return redirect(url_for('feed', username=username, location=location))
 
 if __name__ == '__main__':
     app.run()
