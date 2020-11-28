@@ -97,7 +97,7 @@ def feed(username, location):
         print("Current user deleted a post")
         queries.deletepost(username, request.form['postId'])
         
-    elif request.form['Submit Type'] == "View Replies':
+    elif request.form['Submit Type'] == 'View Replies':
         print("Current user is viewing a post's replies")
         print(request.form['postId'])
         redirect(url_for('comments_feed', username=username, location=location, postid=request.form['postId']))
