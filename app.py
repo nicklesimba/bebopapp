@@ -32,6 +32,8 @@ def login():
     if 'Login' in request.form:
         valid = users.check_login(username, password)
         if valid:
+            #update user's location with their new login location
+            queries.update_user_location(username, location)
             ## redirect to feed page with location information
             return redirect(url_for('feed', username=username, location=location))
             
@@ -99,6 +101,10 @@ def feed(username, location):
         
     return redirect(url_for('feed', username=username, location=location))
     
+
+@app.route('/feed/<username>', methods=['GET', 'POST'])
+def user_info(username, location):
+
 
 if __name__ == '__main__':
     app.run()

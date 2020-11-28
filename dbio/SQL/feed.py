@@ -310,6 +310,30 @@ def dislikepost(user, post_id):
     cursor.close()
     db.close()
 
+
+def update_user_location(user, location):
+    db = my.connect(
+        host="localhost",
+        database="bebop26dmnr_db", 
+        user="bebop26dmnr_nicklesimba", 
+        password="Yareyaredaze2643"  
+    )
+    cursor = db.cursor(prepared=True)
+
+    sql = """
+        UPDATE Users U
+        SET locations = %s
+        WHERE U.username = %s
+    """
+
+    cursor.execute(sql, (location, user))
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+
+
 ##  TEST AREA
 # run only one createpost at a time for now.
 # createpost("nicklesimba", "Champaign", "ayo", "")
