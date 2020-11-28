@@ -149,7 +149,6 @@ def comments_feed(username, location, postid):
     
     elif request.form['Submit Type'] == "Delete":
         print("Current user deleted their reply to a post")
-        
         queries.deletecomment(request.form[commentId])
         
     ## elif implement a button to go back to the feed
