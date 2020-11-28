@@ -62,7 +62,8 @@ def feed_query(user):
     return records
     
 # Gets all the comments for a post
-def comments_feed_query(postid):
+# order_type should be a string equal to "comment_id", "likes", or "relevancy"
+def comments_feed_query(postid, order_type):
     db = my.connect(
         host="localhost",
         database="bebop26dmnr_db", 
@@ -72,12 +73,13 @@ def comments_feed_query(postid):
     cursor = db.cursor(prepared=True)
     
     sql = """
-        SELECT comment_id, author, comment_message, likes, dislikes
-        FROM Comments c
-        WHERE c.post_id = %s
-        ORDER BY comment_id
+    SELECT comment_id, author, comment_message, likes, dislikes
+    FROM Comments c
+    WHERE c.post_id = %s
+    ORDER BY %s
     """
-    number_of_rows = cursor.execute(sql, (postid,))
+
+    number_of_rows = cursor.execute(sql, (postid, order_type))
     records = cursor.fetchall()
     
     cursor.close()

@@ -115,7 +115,7 @@ def feed(username, location):
 def comments_feed(username, location, postid):
     ## load the replies based on postid
     comment_info = {}
-    query_result = queries.comments_feed_query(postid)
+    query_result = queries.comments_feed_query(postid, "comment_id") # second argument needs to be replaced with result of dropdown menu
     for i in query_result:
         curr = {
             'name': _byte_decode(i[1]),
