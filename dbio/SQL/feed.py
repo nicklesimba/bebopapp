@@ -72,14 +72,29 @@ def comments_feed_query(postid, order_type):
     )
     cursor = db.cursor(prepared=True)
     
-    sql = """
-    SELECT comment_id, author, comment_message, likes, dislikes
-    FROM Comments c
-    WHERE c.post_id = %s
-    ORDER BY %s DESC
-    """
-
-    number_of_rows = cursor.execute(sql, (postid, order_type))
+    if order_type == "comment_id":
+        sql = """
+        SELECT comment_id, author, comment_message, likes, dislikes
+        FROM Comments c
+        WHERE c.post_id = %s
+        ORDER BY comment_id DESC
+        """
+    elif order_type == "likes":
+        sql = """
+        SELECT comment_id, author, comment_message, likes, dislikes
+        FROM Comments c
+        WHERE c.post_id = %s
+        ORDER BY likes DESC
+        """
+    elif order_type == "relevancy":
+        sql = """
+        SELECT comment_id, author, comment_message, likes, dislikes
+        FROM Comments c
+        WHERE c.post_id = %s
+        ORDER BY relevancy DESC
+        """
+        
+    number_of_rows = cursor.execute(sql, (postid,))
     records = cursor.fetchall()
     
     cursor.close()
