@@ -115,7 +115,7 @@ def feed(username, location):
 def comments_feed(username, location, postid):
     ## load the replies based on postid
     comment_info = {}
-    query_result = queries.comments_feed_query(postid, "likes") 
+    query_result = queries.comments_feed_query(postid, "comment_id") 
     # ^^^ ^^^ ^^^ README: COMMENTS_FEED_QUERY FUNCTION ^^^ ^^^ ^^^
     # second hardcoded argument needs to be replaced with result of dropdown menu. here's what should go for each dropdown option, all are sorted DESC.
     # "sort by likes"     ==> "likes"
