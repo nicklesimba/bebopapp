@@ -193,6 +193,8 @@ def user_page(username, location):
         return redirect(url_for('feed', username=username, location=location))
 
 def sort_helper(query_result):
+    comment_info = {}
+    
     for i in query_result:
         curr = {
             'name': _byte_decode(i[1]),
