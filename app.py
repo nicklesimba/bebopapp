@@ -118,12 +118,14 @@ def comments_feed(username, location, postid):
     query_result = queries.comments_feed_query(postid, "comment_id")
 
     print("test")
-    if request.form['Submit Type'] == "SortRecency":
-        print("Current user sorting post replies by recency")
-        query_result = queries.comments_feed_query(postid, "comment_id") 
-    elif request.form['Submit Type'] == "SortLikes":
-        print("Current user sorting post replies by likes")
-        query_result = queries.comments_feed_query(postid, "likes")
+    if request.has_key('Submit Type'):
+        print("oof")
+        if request.form['Submit Type'] == "SortRecency":
+            print("Current user sorting post replies by recency")
+            query_result = queries.comments_feed_query(postid, "comment_id") 
+        elif request.form['Submit Type'] == "SortLikes":
+            print("Current user sorting post replies by likes")
+            query_result = queries.comments_feed_query(postid, "likes")
     print("test")
 
     # One more here for SortRelevancy
