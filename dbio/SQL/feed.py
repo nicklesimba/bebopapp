@@ -219,7 +219,7 @@ def deletecomment(comment_id):
     cursor.execute(sql, (comment_id,))
     
     sql = """
-        DELTE FROM Comment_Interaction WHERE comment_id = %s
+        DELETE FROM Comment_Interaction WHERE comment_id = %s
     """
     cursor.execute(sql, (comment_id,))
     
