@@ -164,6 +164,16 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "Delete":
         print("Current user deleted their reply to a post")
         queries.deletecomment(request.form['commentId'])
+
+    elif request.form['Submit Type'] == "SortRecency":
+        print("Current user sorting post replies by recency")
+        queries.comments_feed_query(postid, "comment_id")
+
+    elif request.form['Submit Type'] == "SortLikes":
+        print("Current user sorting post replies by likes")
+        queries.comments_feed_query(postid, "likes")
+
+    # One more here for SortRelevancy
     
     elif request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location))
