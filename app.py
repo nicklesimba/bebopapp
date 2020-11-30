@@ -109,12 +109,11 @@ def feed(username, location):
         return redirect(url_for('comments_feed', username=username, location=location, postid=request.form['postId']))
         
     return redirect(url_for('feed', username=username, location=location))
-    
+
 # view replies
 @app.route('/feed/<username>/<location>/<postid>', methods=['GET', 'POST'])
 def comments_feed(username, location, postid):
     ## load the replies based on postid
-    sort_flag = 0
     comment_info = {}
     query_result = queries.comments_feed_query(postid, "comment_id") 
     # ^^^ ^^^ ^^^ README: COMMENTS_FEED_QUERY FUNCTION ^^^ ^^^ ^^^
@@ -168,18 +167,18 @@ def comments_feed(username, location, postid):
 
     elif request.form['Submit Type'] == "SortRecency":
         print("Current user sorting post replies by recency")
-        query_result = queries.comments_feed_query(postid, request.form['comment_id'])
-        
+        query_result = queries.comments_feed_query(postid, "comment_id") 
 
     elif request.form['Submit Type'] == "SortLikes":
         print("Current user sorting post replies by likes")
-        query_result = queries.comments_feed_query(postid, request.form['likes'])
+        query_result = queries.comments_feed_query(postid, "likes")
         
     # One more here for SortRelevancy
 
     elif request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location))
     
+    print(query_result)
     return redirect(url_for('comments_feed', username=username, location=location, postid=postid))
         
     
