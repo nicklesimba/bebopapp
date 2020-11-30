@@ -168,12 +168,12 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "SortRecency":
         print("Current user sorting post replies by recency")
         query_result = queries.comments_feed_query(postid, "comment_id")
-        sort_helper(query_result)
+        sort_helper(query_result, postid, username)
 
     elif request.form['Submit Type'] == "SortLikes":
         print("Current user sorting post replies by likes")
         query_result = queries.comments_feed_query(postid, "likes")
-        sort_helper(query_result)
+        sort_helper(query_result, postid, username)
         
 
     # One more here for SortRelevancy
@@ -192,7 +192,7 @@ def user_page(username, location):
     if request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location))
 
-def sort_helper(query_result):
+def sort_helper(query_result, postid, username):
     comment_info = {}
     
     for i in query_result:
