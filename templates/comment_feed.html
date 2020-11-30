@@ -6,6 +6,12 @@
 		<title>Bebop Comment Feed</title>
 		<link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='styles.css') }}">
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+		<script src="jquery.js"></script> 
+		<script> 
+		$(function(){
+			$("#includedContent").load("dropdown.html"); 
+		});
+		</script> 
 	</head>
 	<body>
 		<div class = "header">Bebop</div>
