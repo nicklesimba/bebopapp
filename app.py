@@ -16,7 +16,7 @@ def _byte_decode(text):
 
 @app.route('/')
 def index():
-    return ' test world!'
+    return redirect(url_for('login'))
     
 # login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -164,14 +164,12 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "Delete":
         print("Current user deleted their reply to a post")
         queries.deletecomment(request.form['commentId'])
-        
-    ## elif implement a button to go back to the feed
+    
+    elif request.form['Submit Type'] == 'Back':
+        return redirect(url_for('feed', username=username, location=location))
     
     return redirect(url_for('comments_feed', username=username, location=location, postid=postid))
         
-## view all the previous replies
-## need to be able to create a reply
-## need to be able to go back to the feed
     
 
 @app.route('/user/<username>/<location>', methods=['GET', 'POST'])
