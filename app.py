@@ -118,7 +118,7 @@ def comments_feed(username, location, postid):
     query_result = queries.comments_feed_query(postid, "comment_id")
 
     print("test")
-    if request.has_key('Submit Type'):
+    if 'Submit Type' in request.form:
         print("oof")
         if request.form['Submit Type'] == "SortRecency":
             print("Current user sorting post replies by recency")
