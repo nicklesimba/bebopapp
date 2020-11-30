@@ -142,8 +142,8 @@ def createpost(user, location, post_message, tags):
     post_id = int(calendar.timegm(time.gmtime()))
     
     sql = """
-        INSERT INTO Posts (post_id, author, location, post_message, tags, reply_ids, likes, dislikes) 
-        VALUES (%s, %s, %s, %s, %s, "", 0, 0)
+        INSERT INTO Posts (post_id, author, location, post_message, tags, likes, dislikes) 
+        VALUES (%s, %s, %s, %s, %s, 0, 0)
     """
     query_tuple = (post_id, user, location, post_message, tags)
 
