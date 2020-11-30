@@ -167,11 +167,14 @@ def comments_feed(username, location, postid):
 
     elif request.form['Submit Type'] == "SortRecency":
         print("Current user sorting post replies by recency")
-        queries.comments_feed_query(postid, "comment_id")
+        query_result = queries.comments_feed_query(postid, "comment_id")
+        sort_helper(query_result)
 
     elif request.form['Submit Type'] == "SortLikes":
         print("Current user sorting post replies by likes")
-        queries.comments_feed_query(postid, "likes")
+        query_result = queries.comments_feed_query(postid, "likes")
+        sort_helper(query_result)
+        
 
     # One more here for SortRelevancy
     
@@ -188,6 +191,33 @@ def user_page(username, location):
         return render_template('user_page.html', username=username, location=location)
     if request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location))
+
+def sort_helper:
+    for i in query_result:
+        curr = {
+            'name': _byte_decode(i[1]),
+            'id': i[0],
+            'message': _byte_decode(i[2]),
+            'likes': i[3],
+            'dislikes': i[4]
+        }
+        comment_info[i[0]] = curr
+    comments = comment_info.keys()
+    
+    ## gets the information of the post whose replies you wanted to see
+    original = queries.post_info_query(postid)
+    original_post_author = _byte_decode(original[0])
+    original_post_message = _byte_decode(original[1])
+    
+    if request.method == 'GET':
+        return render_template(
+            'comment_feed.html',
+            author=original_post_author,
+            message=original_post_message,
+            comments=comments,
+            comment_info=comment_info,
+            curr_user=username
+        )
 
 if __name__ == '__main__':
     app.run()
