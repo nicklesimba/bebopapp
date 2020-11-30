@@ -153,6 +153,7 @@ def comments_feed(username, location, postid):
     original_post_message = _byte_decode(original[1])
     
     if request.method == 'GET':
+        print("yeehaw")
         return render_template(
             'comment_feed.html',
             author=original_post_author,
