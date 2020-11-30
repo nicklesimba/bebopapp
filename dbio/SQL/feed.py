@@ -179,10 +179,9 @@ def createcomment(postid, user, message):
 
 # func - deletepost
 # desc - takes in a username and post_id, then deletes Post and Posted_By entry
-# args - user - the current user
-#        post_id - the timestamp of the post that should be deleted
+# args - post_id - the timestamp of the post that should be deleted
 # ret  - N/A, just updates db table Post and Posted_By
-def deletepost(user, post_id):
+def deletepost(post_id):
     db = my.connect(
         host="localhost",
         database="bebop26dmnr_db", 
@@ -193,6 +192,11 @@ def deletepost(user, post_id):
     
     sql = """
         DELETE FROM Posts WHERE post_id = %s
+    """
+    cursor.execute(sql, (post_id,))
+    
+    sql = """
+        DELETE FROM Post_Interaction WHERE post_id = %s
     """
     cursor.execute(sql, (post_id,))
 
@@ -211,6 +215,11 @@ def deletecomment(comment_id):
     
     sql = """
         DELETE FROM Comments WHERE comment_id = %s
+    """
+    cursor.execute(sql, (comment_id,))
+    
+    sql = """
+        DELTE FROM Comment_Interaction WHERE comment_id = %s
     """
     cursor.execute(sql, (comment_id,))
     
