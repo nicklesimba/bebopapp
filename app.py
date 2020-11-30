@@ -115,7 +115,18 @@ def feed(username, location):
 def comments_feed(username, location, postid):
     ## load the replies based on postid
     comment_info = {}
-    query_result = queries.comments_feed_query(postid, "comment_id") 
+    query_result = queries.comments_feed_query(postid, "comment_id")
+
+    if request.form['Submit Type'] == "SortRecency":
+        print("Current user sorting post replies by recency")
+        query_result = queries.comments_feed_query(postid, "comment_id") 
+        
+    elif request.form['Submit Type'] == "SortLikes":
+        print("Current user sorting post replies by likes")
+        query_result = queries.comments_feed_query(postid, "likes")
+
+    # One more here for SortRelevancy
+
     # ^^^ ^^^ ^^^ README: COMMENTS_FEED_QUERY FUNCTION ^^^ ^^^ ^^^
     # second hardcoded argument needs to be replaced with result of dropdown menu. here's what should go for each dropdown option, all are sorted DESC.
     # "sort by likes"     ==> "likes"
@@ -164,56 +175,6 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "Delete":
         print("Current user deleted their reply to a post")
         queries.deletecomment(request.form['commentId'])
-
-    elif request.form['Submit Type'] == "SortRecency":
-        print("Current user sorting post replies by recency")
-        query_result = queries.comments_feed_query(postid, "comment_id") 
-        for i in query_result:
-            curr = {
-                'name': _byte_decode(i[1]),
-                'id': i[0],
-                'message': _byte_decode(i[2]),
-                'likes': i[3],
-                'dislikes': i[4]
-            }
-            comment_info[i[0]] = curr
-        comments = comment_info.keys()
-
-        if request.method == 'GET':
-            return render_template(
-                'comment_feed.html',
-                author=original_post_author,
-                message=original_post_message,
-                comments=comments,
-                comment_info=comment_info,
-                curr_user=username
-            )
-
-
-    elif request.form['Submit Type'] == "SortLikes":
-        print("Current user sorting post replies by likes")
-        query_result = queries.comments_feed_query(postid, "likes")
-        for i in query_result:
-            curr = {
-                'name': _byte_decode(i[1]),
-                'id': i[0],
-                'message': _byte_decode(i[2]),
-                'likes': i[3],
-                'dislikes': i[4]
-            }
-            comment_info[i[0]] = curr
-        comments = comment_info.keys()
-
-        if request.method == 'GET':
-            return render_template(
-                'comment_feed.html',
-                author=original_post_author,
-                message=original_post_message,
-                comments=comments,
-                comment_info=comment_info,
-                curr_user=username
-            )
-    # One more here for SortRelevancy
 
     elif request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location))
