@@ -647,6 +647,44 @@ def dislikecomment(user, comment_id):
     cursor.close()
     db.close()
 
+# Function that will be invoked for "My Info" Page - top 5 users that you've interacted the most with
+def interacted_with(user):
+    db = my.connect(
+        host="localhost",
+        database="bebop26dmnr_db", 
+        user="bebop26dmnr_nicklesimba", 
+        password="Yareyaredaze2643"  
+    )
+    cursor = db.cursor(prepared=True)
+
+    sql = """
+        (
+        SELECT author
+        FROM Comments NATURAL JOIN (
+                SELECT comment_id
+                FROM Comment_Interaction
+                WHERE username = %s
+            ) AS tmp
+        )
+        UNION
+        (
+        SELECT author
+        FROM Posts NATURAL JOIN (
+                SELECT post_id
+                FROM Post_Interaction
+                WHERE username = %s
+            ) AS tmp2
+        )
+        LIMIT 5
+    """
+
+    cursor.execute(sql, (user,))
+    records = cursor.fetchall()
+    cursor.close()
+    db.close()
+
+    return records
+
 
 ##  TEST AREA
 # run only one createpost at a time for now.
