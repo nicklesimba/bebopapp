@@ -9,6 +9,7 @@ template_path = os.path.join(project_root, 'templates')
 static_path = os.path.join(project_root, 'static')
 app = Flask(__name__, template_folder=template_path, static_folder=static_path)
 
+sort_type = "comment_id"
 
 def _byte_decode(text):
 	return text.decode(encoding='UTF-8')
@@ -114,19 +115,9 @@ def feed(username, location):
 @app.route('/feed/<username>/<location>/<postid>', methods=['GET', 'POST'])
 def comments_feed(username, location, postid):
     ## load the replies based on postid
+    global sort_type
     comment_info = {}
-    query_result = queries.comments_feed_query(postid, "comment_id")
-
-    print("test")
-    if 'Submit Type' in request.form:
-        print("oof")
-        if request.form['Submit Type'] == "SortRecency":
-            print("Current user sorting post replies by recency")
-            query_result = queries.comments_feed_query(postid, "comment_id") 
-        elif request.form['Submit Type'] == "SortLikes":
-            print("Current user sorting post replies by likes")
-            query_result = queries.comments_feed_query(postid, "likes")
-    print("test")
+    query_result = queries.comments_feed_query(postid, sort_type)
 
     # One more here for SortRelevancy
 
@@ -179,9 +170,19 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "Delete":
         print("Current user deleted their reply to a post")
         queries.deletecomment(request.form['commentId'])
+    
+    elif request.form['Submit Type'] == "SortRecency":
+        print("Current user sorting post replies by recency")
+        sort_type = "comment_id"
+
+    elif request.form['Submit Type'] == "SortLikes":
+        print("Current user sorting post replies by likes")
+        sort_type = "likes"
 
     elif request.form['Submit Type'] == 'Back':
+        sort_type = "comment_id"
         return redirect(url_for('feed', username=username, location=location))
+
     
     print(query_result)
     return redirect(url_for('comments_feed', username=username, location=location, postid=postid))
