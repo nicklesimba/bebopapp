@@ -114,6 +114,7 @@ def feed(username, location):
 @app.route('/feed/<username>/<location>/<postid>', methods=['GET', 'POST'])
 def comments_feed(username, location, postid):
     ## load the replies based on postid
+    sort_flag = 0
     comment_info = {}
     query_result = queries.comments_feed_query(postid, "comment_id") 
     # ^^^ ^^^ ^^^ README: COMMENTS_FEED_QUERY FUNCTION ^^^ ^^^ ^^^
@@ -165,7 +166,6 @@ def comments_feed(username, location, postid):
         print("Current user deleted their reply to a post")
         queries.deletecomment(request.form['commentId'])
 
-    sort_flag = 0
     elif request.form['Submit Type'] == "SortRecency":
         print("Current user sorting post replies by recency")
         query_result = queries.comments_feed_query(postid, "comment_id")
