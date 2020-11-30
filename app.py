@@ -168,11 +168,51 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "SortRecency":
         print("Current user sorting post replies by recency")
         query_result = queries.comments_feed_query(postid, "comment_id") 
+        for i in query_result:
+            curr = {
+                'name': _byte_decode(i[1]),
+                'id': i[0],
+                'message': _byte_decode(i[2]),
+                'likes': i[3],
+                'dislikes': i[4]
+            }
+            comment_info[i[0]] = curr
+        comments = comment_info.keys()
+
+        if request.method == 'GET':
+            return render_template(
+                'comment_feed.html',
+                author=original_post_author,
+                message=original_post_message,
+                comments=comments,
+                comment_info=comment_info,
+                curr_user=username
+            )
+
 
     elif request.form['Submit Type'] == "SortLikes":
         print("Current user sorting post replies by likes")
         query_result = queries.comments_feed_query(postid, "likes")
-        
+        for i in query_result:
+            curr = {
+                'name': _byte_decode(i[1]),
+                'id': i[0],
+                'message': _byte_decode(i[2]),
+                'likes': i[3],
+                'dislikes': i[4]
+            }
+            comment_info[i[0]] = curr
+        comments = comment_info.keys()
+
+        if request.method == 'GET':
+            return render_template(
+                'comment_feed.html',
+                author=original_post_author,
+                message=original_post_message,
+                comments=comments,
+                comment_info=comment_info,
+                curr_user=username
+            )
     # One more here for SortRelevancy
 
     elif request.form['Submit Type'] == 'Back':
