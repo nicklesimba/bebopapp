@@ -175,12 +175,12 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "SortLikes":
         print("Current user sorting post replies by likes")
         query_result = queries.comments_feed_query(postid, "likes")
-        sort_helper(query_result, postid, username)
         sort_flag = 1
         
     # One more here for SortRelevancy
     
     if sort_flag:
+        print("yeet")
         for i in query_result:
             curr = {
                 'name': _byte_decode(i[1]),
