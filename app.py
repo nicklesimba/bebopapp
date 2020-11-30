@@ -119,14 +119,6 @@ def comments_feed(username, location, postid):
     comment_info = {}
     query_result = queries.comments_feed_query(postid, sort_type)
 
-    # One more here for SortRelevancy
-
-    # ^^^ ^^^ ^^^ README: COMMENTS_FEED_QUERY FUNCTION ^^^ ^^^ ^^^
-    # second hardcoded argument needs to be replaced with result of dropdown menu. here's what should go for each dropdown option, all are sorted DESC.
-    # "sort by likes"     ==> "likes"
-    # "sort by relevancy" ==> "relevancy"
-    # "sort by recency" ==> "comment_id"
-
     for i in query_result:
         curr = {
             'name': _byte_decode(i[1]),
@@ -178,6 +170,8 @@ def comments_feed(username, location, postid):
     elif request.form['Submit Type'] == "SortLikes":
         print("Current user sorting post replies by likes")
         sort_type = "likes"
+
+    # One more here for SortRelevancy
 
     elif request.form['Submit Type'] == 'Back':
         sort_type = "comment_id"
