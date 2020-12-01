@@ -3,12 +3,17 @@ import os
 from flask import Flask, request, render_template, redirect, url_for
 import dbio.SQL.users as users
 import dbio.SQL.feed as queries
+import gensim 
+from gensim.models import Word2Vec 
+import gensim.downloader as api
+import json
 
 project_root = os.path.dirname(os.path.realpath('__file__'))
 template_path = os.path.join(project_root, 'templates')
 static_path = os.path.join(project_root, 'static')
 app = Flask(__name__, template_folder=template_path, static_folder=static_path)
 
+model = gensim.models.KeyedVectors.load('local.model')
 sort_type = "comment_id"
 
 def _byte_decode(text):
@@ -162,7 +167,9 @@ def comments_feed(username, location, postid):
     if request.form['Submit Type'] == 'Make Reply':
         print("Current user is replying to a post")
         message = request.form.get('message')
-        queries.createcomment(postid, username, message)
+        score = model.wmdistance(original_post_message, message)
+        print("Comment relevancy: ", score)
+        queries.createcomment(postid, username, message, score)
     
     elif request.form['Submit Type'] == 'Like':
         print("Current user liked a reply to a post")
@@ -176,15 +183,17 @@ def comments_feed(username, location, postid):
         print("Current user deleted their reply to a post")
         queries.deletecomment(request.form['commentId'])
     
-    elif request.form['Submit Type'] == "SortRecency":
+    elif request.form['Submit Type'] == "Recency":
         print("Current user sorting post replies by recency")
         sort_type = "comment_id"
 
-    elif request.form['Submit Type'] == "SortLikes":
+    elif request.form['Submit Type'] == "Likes":
         print("Current user sorting post replies by likes")
         sort_type = "likes"
 
-    # One more here for SortRelevancy
+    elif request.form['Submit Type'] == "Relevancy":
+        print("Current user sorting post replies by relevancy")
+        sort_type = "relevancy"
 
     elif request.form['Submit Type'] == 'Back':
         sort_type = "comment_id"

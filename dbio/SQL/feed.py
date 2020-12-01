@@ -91,7 +91,7 @@ def comments_feed_query(postid, order_type):
         SELECT comment_id, author, comment_message, likes, dislikes
         FROM Comments c
         WHERE c.post_id = %s
-        ORDER BY relevancy DESC
+        ORDER BY relevancy ASC
         """
         
     number_of_rows = cursor.execute(sql, (postid,))
@@ -153,7 +153,7 @@ def createpost(user, location, post_message, tags):
     cursor.close()
     db.close()
 
-def createcomment(postid, user, message):
+def createcomment(postid, user, message, score):
     db = my.connect(
         host="localhost",
         database="bebop26dmnr_db", 
@@ -165,10 +165,10 @@ def createcomment(postid, user, message):
     comment_id = int(calendar.timegm(time.gmtime()))
     
     sql = """
-        INSERT INTO Comments (post_id, comment_id, author, comment_message, likes, dislikes)
-        VALUES (%s, %s, %s, %s, 0, 0)
+        INSERT INTO Comments (post_id, comment_id, author, comment_message, likes, dislikes, relevancy)
+        VALUES (%s, %s, %s, %s, 0, 0, %s)
     """
-    query_tuple = (postid, comment_id, user, message)
+    query_tuple = (postid, comment_id, user, message, score)
     
     number_of_rows = cursor.execute(sql, query_tuple)
     
