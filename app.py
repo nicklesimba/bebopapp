@@ -57,7 +57,7 @@ def login():
 
 # user feed
 @app.route('/feed/<username>/<location>', methods=['GET', 'POST'])
-def feed(username, location):
+def feed(username, location, search_tag=None):
     post_info = {}
     query_result = queries.feed_query(username)
     for i in query_result:
@@ -70,7 +70,11 @@ def feed(username, location):
             'likes':i[4],
             'dislikes':i[5]
         }
-        post_info[i[0]] = curr
+        if search_tag is None:
+            post_info[i[0]] = curr
+        for i in tags.split(',')
+            if search_tag.lower() == i.lower().strip():
+                post_info[i[0]] = curr
     posts = post_info.keys()
 
     if request.method == 'GET':
@@ -78,7 +82,8 @@ def feed(username, location):
             'feed.html',
             posts=posts,
             post_info=post_info,
-            curr_user=username
+            curr_user=username,
+            search_tag=search_tag
         )
     
     if request.form["Submit Type"] == 'Make Post':
@@ -104,6 +109,9 @@ def feed(username, location):
         print('Redirecting to user page', username, location)
         return redirect(url_for('user_page', username=username, location=location))
         
+    elif request.form['Submit Type'] == 'Search Tag':
+        return redirect(url_for('feed', username=username, location=location, search_tag=request.form['search_tag']))
+
     elif request.form['Submit Type'] == 'View Replies':
         print("Current user is viewing a post's replies")
         print(request.form['postId'])

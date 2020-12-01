@@ -10,6 +10,12 @@
 	<body>
 		<div class = "header">Bebop</div>
 		<div class="container">
+			<form action="" method="post" class="search_tags">
+				Search by tag:  
+				<label for="tags">Tags: </label>
+				<input type="text" placeholder="Search Tag" name="search_tag" value="{{ request.form.search_tag }}"><br>
+				<input class="btn btn-default" type="submit" name="Submit Type" value="Search Tag">
+			</form>
 			<form method="post">
 				<input class="btn btn-default" type="submit" name="Submit Type" value="My Info">
 			</form>
@@ -21,6 +27,9 @@
 				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}"><br>
 				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
 			</form>
+			{% if search_tag is not None %}
+				Showing posts with the {{ search_tag }} tag...
+			{% endif %}
 			{% for post in posts %}
 			<div class = "post">
 				<div class = "post_header">
