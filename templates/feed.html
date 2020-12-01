@@ -12,9 +12,9 @@
 		<div class="container">
 			<form action="" method="post" class="search_tags">
 				Search by tag:  
-				<label for="tags">Tags: </label>
 				<input type="text" placeholder="Search Tag" name="search_tag" value="{{ request.form.search_tag }}"><br>
 				<input class="btn btn-default" type="submit" name="Submit Type" value="Search Tag">
+				<input class="btn btn-default" type="submit" name="Submit Type" value="Clear Tag">
 			</form>
 			<form method="post">
 				<input class="btn btn-default" type="submit" name="Submit Type" value="My Info">
@@ -27,7 +27,7 @@
 				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}"><br>
 				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
 			</form>
-			{% if search_tag is not None %}
+			{% if search_tag != "None" %}
 				Showing posts with the {{ search_tag }} tag...
 			{% endif %}
 			{% for post in posts %}
@@ -38,6 +38,7 @@
 				<div class = "post_body">
 					{{ post_info[post]['message'] }}
 				</div>
+				Tags: {{ post_info[post]['tags'] }}
 				<div class = "interactions">
 					<form method ="post" action="">
 						<input type="hidden" id="postId" name="postId" value="{{ post }}">

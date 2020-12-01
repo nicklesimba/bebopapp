@@ -36,7 +36,7 @@ def login():
             #update user's location with their new login location
             queries.update_user_location(username, location)
             ## redirect to feed page with location information
-            return redirect(url_for('feed', username=username, location=location))
+            return redirect(url_for('feed', username=username, location=location, search_tag="None"))
             
         else:
             error = "Invalid Username or Password"
@@ -45,7 +45,7 @@ def login():
     elif 'Register' in request.form:
         try:
             users.create_user(username, password, location)
-            return redirect(url_for('feed', username=username, location=location))
+            return redirect(url_for('feed', username=username, location=location, search_tag="None"))
             
         except (TypeError, RuntimeError) as e:
             error = e.args[0]
@@ -56,8 +56,9 @@ def login():
         return render_template('login.html', error=error)
 
 # user feed
-@app.route('/feed/<username>/<location>', methods=['GET', 'POST'])
-def feed(username, location, search_tag=None):
+@app.route('/feed/<username>/<location>/searchtag<search_tag>', methods=['GET', 'POST'])
+def feed(username, location, search_tag):
+    print("SEARCH TAG: ", search_tag)
     post_info = {}
     query_result = queries.feed_query(username)
     for i in query_result:
@@ -70,11 +71,12 @@ def feed(username, location, search_tag=None):
             'likes':i[4],
             'dislikes':i[5]
         }
-        if search_tag is None:
+        if search_tag == "None":
             post_info[i[0]] = curr
-        for i in tags.split(',')
-            if search_tag.lower() == i.lower().strip():
-                post_info[i[0]] = curr
+        else:
+            for i in curr['tags'].split(','):
+                if search_tag.lower() == i.lower().strip():
+                    post_info[i[0]] = curr
     posts = post_info.keys()
 
     if request.method == 'GET':
@@ -107,20 +109,23 @@ def feed(username, location, search_tag=None):
     
     elif request.form['Submit Type'] == 'My Info':
         print('Redirecting to user page', username, location)
-        return redirect(url_for('user_page', username=username, location=location))
+        return redirect(url_for('user_page', username=username, location=location, search_tag="None"))
         
     elif request.form['Submit Type'] == 'Search Tag':
         return redirect(url_for('feed', username=username, location=location, search_tag=request.form['search_tag']))
+
+    elif request.form['Submit Type'] == 'Clear Tag':
+        return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
     elif request.form['Submit Type'] == 'View Replies':
         print("Current user is viewing a post's replies")
         print(request.form['postId'])
         return redirect(url_for('comments_feed', username=username, location=location, postid=request.form['postId']))
         
-    return redirect(url_for('feed', username=username, location=location))
+    return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
 # view replies
-@app.route('/feed/<username>/<location>/<postid>', methods=['GET', 'POST'])
+@app.route('/comments/<username>/<location>/<postid>', methods=['GET', 'POST'])
 def comments_feed(username, location, postid):
     ## load the replies based on postid
     global sort_type
@@ -183,7 +188,7 @@ def comments_feed(username, location, postid):
 
     elif request.form['Submit Type'] == 'Back':
         sort_type = "comment_id"
-        return redirect(url_for('feed', username=username, location=location))
+        return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
     
     print(query_result)
@@ -196,7 +201,7 @@ def user_page(username, location):
     if request.method == 'GET':
         return render_template('user_page.html', username=username, location=location)
     if request.form['Submit Type'] == 'Back':
-        return redirect(url_for('feed', username=username, location=location))
+        return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
 if __name__ == '__main__':
     app.run()
