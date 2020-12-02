@@ -64,7 +64,6 @@ class AnalyticsDB:
         groupDict['_id'] = "$location"
         groupDict['count'] = { "$sum" : 1 }
         projectDict['_id'] = 0
-        projectDict['_id'] = 0
         projectDict['location'] = "$_id"
         projectDict['count'] = 1
         sortDict['location'] = 1
@@ -75,3 +74,21 @@ class AnalyticsDB:
         sortDict = { "$sort": sortDict }
 
         return self.postDataColl.aggregate([matchDict, groupDict, projectDict, sortDict])
+
+    def aggregate_recent_posts(self, username):
+        matchDict = {}
+        projectDict = {}
+        sortDict = {}
+
+        matchDict['username'] = username
+        projectDict['_id'] = 0
+        projectDict['likes'] = 1
+        projectDict['dislikes'] = 1
+        sortDict['post_id'] = -1
+
+        matchDict = { "$match": matchDict }
+        projectDict = { "$project": projectDict }
+        sortDict = { "$sort": sortDict }
+        limitDict = { "$limit" : 5 }
+
+        return self.postDataColl.aggregate([matchDict, projectDict, sortDict, limitDict])
