@@ -18,11 +18,22 @@ class AnalyticsDB:
         document['username'] = username
         document['tod'] = timeOfDay
         document['location'] = location
-        document['tag'] = tags
+        document['tags'] = tags
         document['post_length'] = messageLength
         document['post_date'] = datetime.datetime.fromtimestamp(int(postID)).strftime('%Y-%m-%d')
 
         self.postDataColl.insert_one(document)
+    
+    def update_likes_on_post(self, postID, likes):
+        matchDict = {}
+        setDict = {}
+        matchDict['post_id'] = postID
+        setDict['likes'] = likes
+        
+        setDict = { "$set": setDict }
+
+        self.postDataColl.update_one(matchDict, setDict)
+
 
 
     def collect_user_data(self, username):

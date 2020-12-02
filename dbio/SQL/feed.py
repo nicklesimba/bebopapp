@@ -156,7 +156,7 @@ def createpost(user, location, post_message, tags):
     cursor.close()
     db.close()
 
-    analyticsDB.add_new_post_data(post_id, user, location, tags, (post_id % 86400), len(post_message))
+    analyticsDB.add_new_post_data(post_id, user, location, tags.split(','), (post_id % 86400), len(post_message))
 
 def createcomment(postid, user, message, score):
     db = my.connect(
@@ -250,7 +250,7 @@ def likepost(user, post_id):
 
     cursor.execute(sql, (post_id, user))
     records = cursor.fetchall()
-    
+
     if len(records) > 0: # Post has been interacted with before
         if records[0][0] == 1: # Post was already liked by the user, so unlike it
             # Decrement the likes in Posts
@@ -269,6 +269,16 @@ def likepost(user, post_id):
             """
             cursor.execute(sql, (post_id, user))
             
+            sql = """
+                SELECT likes
+                FROM Posts
+                WHERE post_id = %s
+            """
+
+            cursor.execute(sql, (post_id,))
+            num_likes = cursor.fetchall()[0][0]
+            
+            analyticsDB.update_likes_on_post(post_id, num_likes)
             
         else: # Post has not been liked by the user
             # Increment the likes in Posts
@@ -285,6 +295,17 @@ def likepost(user, post_id):
                WHERE post_id = %s AND username = %s
             """
             cursor.execute(sql, (post_id, user))
+
+            sql = """
+                SELECT likes
+                FROM Posts
+                WHERE post_id = %s
+            """
+            cursor.execute(sql, (post_id,))
+            num_likes = cursor.fetchall()[0][0]
+            
+            analyticsDB.update_likes_on_post(post_id, num_likes)
+            
             
         ## Check if the user has also disliked the post, if so - remove their dislike and decrement the total dislikes
         sql = """
@@ -408,6 +429,17 @@ def dislikepost(user, post_id):
                     WHERE p.post_id = %s
                 """
                 cursor.execute(sql, (post_id,))
+
+                sql = """
+                    SELECT likes
+                    FROM Posts
+                    WHERE post_id = %s
+                """
+                cursor.execute(sql, (post_id,))
+                num_likes = cursor.fetchall()[0][0]
+                
+                analyticsDB.update_likes_on_post(post_id, num_likes)
+            
             
             
     else: # Post has not been interacted with until now
