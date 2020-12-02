@@ -13,14 +13,11 @@
 		<form method="post">
 			<input class="btn btn-default" type="submit" name="Submit Type" value="Back">
 		</form>
-		Location
-		{{ location_dict }} <br>
-		Tag
-		{{ tag_dict }} <br>
 		Recent
-		{{ recent_dict }} <br>
-		Time
-		{{ time_dict }} <br>
+		{% for item in recent_dict %} {{ item['likes'] }},{% endfor %}
+		Location
+		{% for item in location_dict %} {{ item['location'] }},{% endfor %}
+		{% for item in location_dict %} {{ item['count'] }},{% endfor %}
 
 		<div class="linecontainer">
 			<div class="linegraph">
@@ -34,21 +31,21 @@
 				Chart.defaults.global.defaultFontFamily = 'open_sansregular';
 
 				var data = {
-					labels : ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
+					labels : ["5", "4", "3", "2", "1"],
 					datasets : [
 						{
-						label: "Name 1",
+						label: "Likes",
 						backgroundColor: 'rgba(226,280,307,.6)',
 						borderColor: 'rgba(75,93,102,1)',
-							pointBackgroundColor: 'rgba(75,93,102,1)',
-						data: [1,2,3,4]
+						pointBackgroundColor: 'rgba(75,93,102,1)',
+						data: [{% for item in recent_dict %} {{ item['likes'] }},{% endfor %}]
 						},
 						{
-						label: "Name 2",
+						label: "Dislikes",
 						backgroundColor: "rgba(300,240,257,.6)",
 						borderColor: "rgba(100,93,102,1)",
-							pointBackgroundColor: "rgba(100,93,102,1)",
-						data: [4,3,2,1]
+						pointBackgroundColor: "rgba(100,93,102,1)",
+						data: [{% for item in recent_dict %} {{ item['dislikes'] }},{% endfor %}]
 						}
 					],
 				}
@@ -94,7 +91,7 @@
 				Chart.defaults.global.defaultFontSize = 16;
 
 				var data = {
-					labels: ["Solo", "Duo", "Squad"],
+					labels: {{ location_labels | tojson }},
 					datasets: [
 						{
 						fill: true,
@@ -102,7 +99,7 @@
 							'rgb(151,187,205)',
 							'rgb(75,93,102)',
 							'rgb(226,280,307)'],
-						data: [1,2,3,4],
+						data: [{% for item in location_dict %} {{ item['count'] }},{% endfor %}],
 						borderColor:	['black', 'black', 'black'],
 						borderWidth: [2,2,2]
 						}
@@ -128,7 +125,116 @@
 				<center>
 				<canvas id="bargraphcode" height='240'></canvas>
 				<script>
-				THIRD SCRIPT
+				var ctx = document.getElementById("bargraphcode");
+				var myChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: {{ tod_labels | tojson }},
+					datasets: [{
+						label: 'Times of Day of Posts',
+						data: [{% for item in tod_counts %} {{ tod_counts[item] }},{% endfor %}],
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.2)',
+							'rgba(54, 162, 235, 0.2)',
+							'rgba(255, 206, 86, 0.2)',
+							'rgba(75, 192, 192, 0.2)',
+							'rgba(153, 102, 255, 0.2)',
+						],
+						borderColor: [
+							'rgba(255,99,132,1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)',
+						],
+						borderWidth: 1
+					}]
+				},
+
+				options: {
+					responsive: false,
+					scales: {
+						xAxes: [{
+						ticks: {
+							maxRotation: 90,
+							minRotation: 80
+						}
+						}],
+						yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+						}]
+					}
+				}
+				});
+				</script>
+				</center>
+			</div>
+		</div>
+
+		<div class = "barcontainer">
+			<div class="bargraph">
+				<center>
+				<canvas id="bargraphcode2" height='240'></canvas>
+				<script>
+				var ctx = document.getElementById("bargraphcode2");
+var myChart = new Chart(ctx, {
+type: 'bar',
+data: {
+    labels: {{ tag_labels | tojson }},
+    datasets: [{
+        label: '# of Posts By Tag',
+        data: [{% for item in tag_counts %} {{ item['count'] }},{% endfor %}],
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+    }]
+  },
+
+options: {
+    responsive: false,
+    scales: {
+        xAxes: [{
+        ticks: {
+            maxRotation: 90,
+            minRotation: 80
+        }
+        }],
+        yAxes: [{
+        ticks: {
+            beginAtZero: true
+        }
+        }]
+    }
+}
+});
 				</script>
 				</center>
 			</div>

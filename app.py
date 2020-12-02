@@ -81,8 +81,8 @@ def feed(username, location, search_tag):
         if search_tag == "None":
             post_info[i[0]] = curr
         else:
-            for i in curr['tags'].split(','):
-                if search_tag.lower() == i.lower().strip():
+            for j in curr['tags'].split(','):
+                if search_tag.lower() == j.lower().strip():
                     post_info[i[0]] = curr
     posts = post_info.keys()
 
@@ -213,6 +213,25 @@ def user_page(username, location):
     tag_dict = mongo.aggregate_tag_usage(username)
     recent_dict = mongo.aggregate_recent_posts(username)
     time_dict = mongo.aggregate_post_timeOfDay(username)
+    location_dict = [i for i in location_dict if len(i['location']) > 1]
+    total = 0
+    for i in range(len(location_dict)):
+        location_dict[i]['count'] = int(location_dict[i]['count'])
+        total += location_dict[i]['count']
+    location_labels = [i['location'] for i in location_dict]
+    tod_counts = {"Early Morning":0, "Morning":0, "Afternoon":0, "Evening":0}
+    for i in time_dict:
+        if int(i['tod']) < 21600:
+            tod_counts["Early Morning"] += 1
+        elif int(i['tod']) < 43200:
+            tod_counts["Morning"] += 1
+        elif int(i['tod']) < 64800:
+            tod_counts["Afternoon"] += 1
+        else:
+            tod_counts["Evening"] += 1
+    tag_counts = {}
+    tag_labels = [i['tag'] for i in tag_dict]
+    print(tag_counts)
 
     if request.method == 'GET':
         return render_template(
@@ -220,9 +239,12 @@ def user_page(username, location):
             username=username, 
             location=location,
             location_dict=location_dict,
-            tag_dict=tag_dict,
+            tag_counts=tag_dict,
             recent_dict=recent_dict,
-            time_dict=time_dict
+            tod_counts=tod_counts,
+            location_labels=location_labels,
+            tod_labels=["Early Morning", "Morning", "Afternoon", "Evening"],
+            tag_labels=tag_labels
         )
     if request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location, search_tag="None"))

@@ -73,7 +73,7 @@ class AnalyticsDB:
         projectDict = { "$project": projectDict }
         sortDict = { "$sort": sortDict }
 
-        return self.postDataColl.aggregate([matchDict, groupDict, projectDict, sortDict])
+        return list(self.postDataColl.aggregate([matchDict, groupDict, projectDict, sortDict]))
 
     def aggregate_tag_usage(self, username):
         matchDict = {}
@@ -95,7 +95,7 @@ class AnalyticsDB:
         projectDict = { "$project": projectDict }
         sortDict = { "$sort": sortDict }
 
-        return self.postDataColl.aggregate([unwindDict, matchDict, groupDict, projectDict, sortDict])
+        return list(self.postDataColl.aggregate([unwindDict, matchDict, groupDict, projectDict, sortDict]))
 
     def aggregate_recent_posts(self, username):
         matchDict = {}
@@ -111,7 +111,7 @@ class AnalyticsDB:
         sortDict = { "$sort": sortDict }
         limitDict = { "$limit" : 5 }
 
-        return self.postDataColl.aggregate([matchDict, projectDict, sortDict, limitDict])
+        return list(self.postDataColl.aggregate([matchDict, projectDict, sortDict, limitDict]))
     
     def aggregate_post_timeOfDay(self, username):
         matchDict = {}
@@ -121,4 +121,4 @@ class AnalyticsDB:
         projectDict['_id'] = 0
         projectDict['tod'] = 1
 
-        return self.postDataColl.find(matchDict, projectDict)
+        return list(self.postDataColl.find(matchDict, projectDict))
