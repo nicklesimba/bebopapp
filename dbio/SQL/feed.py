@@ -638,7 +638,28 @@ def likecomment(user, comment_id):
         """
         cursor.execute(sql, (comment_id, user))
         
+    sql = """
+        SELECT likes
+        FROM Comments
+        WHERE comment_id = %s
+    """
+
+    cursor.execute(sql, (comment_id,))
+    num_likes = cursor.fetchall()[0][0]
     
+    analyticsDB.update_likes_on_post(comment_id, num_likes)
+
+    sql = """
+        SELECT dislikes
+        FROM Comments
+        WHERE comment_id = %s
+    """
+
+    cursor.execute(sql, (comment_id,))
+    num_dislikes = cursor.fetchall()[0][0]
+    
+    analyticsDB.update_dislikes_on_post(comment_id, num_dislikes)
+
     db.commit()
     cursor.close()
     db.close()
@@ -737,7 +758,28 @@ def dislikecomment(user, comment_id):
         """
         cursor.execute(sql, (comment_id, user))
         
-        
+    sql = """
+        SELECT likes
+        FROM Comments
+        WHERE comment_id = %s
+    """
+
+    cursor.execute(sql, (comment_id,))
+    num_likes = cursor.fetchall()[0][0]
+    
+    analyticsDB.update_likes_on_post(comment_id, num_likes)
+
+    sql = """
+        SELECT dislikes
+        FROM Comments
+        WHERE comment_id = %s
+    """
+
+    cursor.execute(sql, (comment_id,))
+    num_dislikes = cursor.fetchall()[0][0]
+    
+    analyticsDB.update_dislikes_on_post(comment_id, num_dislikes)
+
     db.commit()
     cursor.close()
     db.close()
