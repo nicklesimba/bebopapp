@@ -27,7 +27,7 @@ class AnalyticsDB:
     def update_likes_on_post(self, postID, likes):
         matchDict = {}
         setDict = {}
-        matchDict['post_id'] = postID
+        matchDict['post_id'] = int(postID)
         setDict['likes'] = likes
         
         setDict = { "$set": setDict }
