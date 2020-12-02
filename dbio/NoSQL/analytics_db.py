@@ -87,7 +87,7 @@ class AnalyticsDB:
         projectDict['_id'] = 0
         projectDict['tag'] = "$_id"
         projectDict['count'] = 1
-        sortDict['tag'] = 1
+        sortDict['count'] = 1
 
         unwindDict = { "$unwind": "$tags" }
         matchDict = { "$match": matchDict }
