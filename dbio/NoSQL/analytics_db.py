@@ -112,3 +112,13 @@ class AnalyticsDB:
         limitDict = { "$limit" : 5 }
 
         return self.postDataColl.aggregate([matchDict, projectDict, sortDict, limitDict])
+    
+    def aggregate_post_timeOfDay(self, username):
+        matchDict = {}
+        projectDict = {}
+
+        matchDict['username'] = username
+        projectDict['_id'] = 0
+        projectDict['tod'] = 1
+
+        return self.postDataColl.find(matchDict, projectDict)
