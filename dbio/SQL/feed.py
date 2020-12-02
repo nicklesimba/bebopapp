@@ -156,7 +156,8 @@ def createpost(user, location, post_message, tags):
     cursor.close()
     db.close()
 
-    analyticsDB.add_new_post_data(post_id, user, location, tags.split(','), (post_id % 86400), len(post_message))
+    mongo_tags = [s.strip() for s in tags.split(',')]
+    analyticsDB.add_new_post_data(post_id, user, location, mongo_tags, (post_id % 86400), len(post_message))
 
 def createcomment(postid, user, message, score):
     db = my.connect(
