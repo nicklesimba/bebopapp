@@ -156,7 +156,7 @@ def createpost(user, location, post_message, tags):
     cursor.close()
     db.close()
 
-    analyticsDB.add_new_post_data(user, post_id, (post_id % 86400))
+    analyticsDB.add_new_post_data(post_id, user, location, tags, (post_id % 86400), len(post_message))
 
 def createcomment(postid, user, message, score):
     db = my.connect(
