@@ -82,8 +82,6 @@ class AnalyticsDB:
 
         matchDict['username'] = username
         projectDict['_id'] = 0
-        projectDict['likes'] = 1
-        projectDict['dislikes'] = 1
         sortDict['post_id'] = -1
 
         matchDict = { "$match": matchDict }
