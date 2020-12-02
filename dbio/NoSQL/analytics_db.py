@@ -14,13 +14,15 @@ class AnalyticsDB:
 
     def add_new_post_data(self, postID, username, location, tags, timeOfDay, messageLength):
         document = {}
-        document['post_id'] = postID
+        document['post_id'] = int(postID)
         document['username'] = username
         document['tod'] = timeOfDay
         document['location'] = location
         document['tags'] = tags
         document['post_length'] = messageLength
         document['post_date'] = datetime.datetime.fromtimestamp(int(postID)).strftime('%Y-%m-%d')
+        document['likes'] = 0
+        document['dislikes'] = 0
 
         self.postDataColl.insert_one(document)
     
