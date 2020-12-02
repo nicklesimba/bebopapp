@@ -357,6 +357,16 @@ def likepost(user, post_id):
             VALUES (%s, %s, 1, 0)
         """
         cursor.execute(sql, (post_id, user))
+
+        sql = """
+            SELECT likes
+            FROM Posts
+            WHERE post_id = %s
+        """
+        cursor.execute(sql, (post_id,))
+        num_likes = cursor.fetchall()[0][0]
+        
+        analyticsDB.update_likes_on_post(post_id, num_likes)
         
     
     db.commit()
@@ -491,6 +501,18 @@ def dislikepost(user, post_id):
             VALUES (%s, %s, 0, 1)
         """
         cursor.execute(sql, (post_id, user))
+
+        sql = """
+            SELECT dislikes
+            FROM Posts
+            WHERE post_id = %s
+        """
+
+        cursor.execute(sql, (post_id,))
+        num_dislikes = cursor.fetchall()[0][0]
+        
+        analyticsDB.update_dislikes_on_post(post_id, num_dislikes)
+                
         
         
     db.commit()
