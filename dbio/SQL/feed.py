@@ -329,6 +329,17 @@ def likepost(user, post_id):
                     WHERE p.post_id = %s
                 """
                 cursor.execute(sql, (post_id,))
+
+                sql = """
+                    SELECT dislikes
+                    FROM Posts
+                    WHERE post_id = %s
+                """
+
+                cursor.execute(sql, (post_id,))
+                num_dislikes = cursor.fetchall()[0][0]
+                
+                analyticsDB.update_dislikes_on_post(post_id, num_dislikes)
                 
                  
     else: # Post has not been interacted with until now
@@ -388,7 +399,18 @@ def dislikepost(user, post_id):
 	           WHERE post_id = %s AND username = %s
             """
             cursor.execute(sql, (post_id, user))
+
+            sql = """
+                SELECT dislikes
+                FROM Posts
+                WHERE post_id = %s
+            """
+
+            cursor.execute(sql, (post_id,))
+            num_dislikes = cursor.fetchall()[0][0]
             
+            analyticsDB.update_dislikes_on_post(post_id, num_dislikes)
+                
             
         else: # Post has not been disliked by the user
             # Increment the disliked in Posts
@@ -406,6 +428,18 @@ def dislikepost(user, post_id):
                WHERE post_id = %s AND username = %s
             """
             cursor.execute(sql, (post_id, user))
+
+            sql = """
+                SELECT dislikes
+                FROM Posts
+                WHERE post_id = %s
+            """
+
+            cursor.execute(sql, (post_id,))
+            num_dislikes = cursor.fetchall()[0][0]
+            
+            analyticsDB.update_dislikes_on_post(post_id, num_dislikes)
+                
             
         ## Check if the user has also liked the post, if so - remove their like and decrement the total likes
         sql = """

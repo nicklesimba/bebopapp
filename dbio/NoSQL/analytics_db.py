@@ -34,6 +34,15 @@ class AnalyticsDB:
 
         self.postDataColl.update_one(matchDict, setDict)
 
+    def update_dislikes_on_post(self, postID, dislikes):
+        matchDict = {}
+        setDict = {}
+        matchDict['post_id'] = int(postID)
+        setDict['dislikes'] = dislikes
+        
+        setDict = { "$set": setDict }
+
+        self.postDataColl.update_one(matchDict, setDict)
 
 
     def collect_user_data(self, username):
