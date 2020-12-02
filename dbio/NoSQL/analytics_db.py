@@ -75,6 +75,28 @@ class AnalyticsDB:
 
         return self.postDataColl.aggregate([matchDict, groupDict, projectDict, sortDict])
 
+    def aggregate_tag_usage(self, username):
+        matchDict = {}
+        projectDict = {}
+        groupDict = {}
+        sortDict = {}
+
+        matchDict['username'] = username
+        groupDict['_id'] = "$tags"
+        groupDict['count'] = { "$sum" : 1 }
+        projectDict['_id'] = 0
+        projectDict['tag'] = "$_id"
+        projectDict['count'] = 1
+        sortDict['tag'] = 1
+
+        unwindDict = { "$unwind": "$tags" }
+        matchDict = { "$match": matchDict }
+        groupDict = { "$group": groupDict }
+        projectDict = { "$project": projectDict }
+        sortDict = { "$sort": sortDict }
+
+        return self.postDataColl.aggregate([unwindDict, matchDict, groupDict, projectDict, sortDict])
+
     def aggregate_recent_posts(self, username):
         matchDict = {}
         projectDict = {}
