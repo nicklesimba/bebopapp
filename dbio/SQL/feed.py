@@ -181,7 +181,7 @@ def createcomment(postid, user, message, score):
     cursor.close()
     db.close()
 
-    analyticsDB.add_new_post_data(postid, user, "", [], (postid % 86400), len(message))
+    analyticsDB.add_new_post_data(int(postid), user, "", [], (int(postid) % 86400), len(message))
 
 
 # func - deletepost
