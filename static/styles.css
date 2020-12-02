@@ -22,15 +22,30 @@ body {
 }
 
 .login_form > input,select {
-	margin: .3em;
+        margin: .3em;
+	padding: .2em;
+}
+
+.info_button > input {
+    color: var(--special);
+    background-color: var(--text);
+
+    font-size: 1.2em;
+    font-weight: 400;
+    text-align: center;
+    border: 0px solid #00AA66;
+}
+
+.info_button > input:hover {
+    color: var(--alt-text);
 }
 
 .post {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin-top: 1.4em;
+    margin-bottom: 1.4em;
 
     color: red;
     background-color: var(--bg);
@@ -42,9 +57,22 @@ body {
     transform: scale(1.05);
 }
 
+.feed_head {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1.4em;
+    margin-bottom: 1.4em;
+    border: 1px solid black;
+
+    padding: .5em;
+    color: black;
+    background-color: var(--bg);
+}
+
 .header {
-    height: 2em;
-    padding-top: 1em;
+    height: auto;
+    padding: .6em;
 
     color: var(--special);
     background-color: var(--text);
@@ -52,6 +80,23 @@ body {
     font-size: 2em;
     font-weight: 400;
     text-align: center;
+}
+
+.info_header {
+    height: auto;
+    padding: .6em;
+    padding-top: 0em;
+
+    color: var(--special);
+    background-color: var(--text);
+
+    font-size: 1em;
+    font-weight: 400;
+    text-align: center;
+}
+
+.info_header:hover {
+    color: var(--text-alt);
 }
 
 .header_login {
@@ -99,6 +144,19 @@ body {
     font-style: normal;
 }
 
+.post_tags {
+    background-color: var(--bg);
+    color: var(--text);
+    padding-right: .6em;
+
+    text-align: right;
+    font-family: Roboto;
+    font-weight: 300;
+    font-style: italic;
+}
+
+
+
 .interactions {
     background-color: var(--bg);
     color: var(--text);
@@ -112,4 +170,33 @@ body {
 
 p {
     white-space: pre;
+}
+
+.showing_posts {
+   text-align: center;
+}
+
+.comment_head {
+   text-align: center;
+   font-family: Roboto;
+   font-weight: 400;
+   font-style: italic;
+}
+
+
+.graphcontainer {
+	height: 40em;
+	width: 56em;
+	margin: auto;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	border: 1px solid black;
+	margin-top: 2em;
+	margin-bottom 2em;
+}
+
+.graph {
+        height: auto;
+        width: auto;
 }

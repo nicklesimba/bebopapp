@@ -9,24 +9,31 @@
 	</head>
 	<body>
 		<div class = "header">Bebop</div>
-		<form method="post">
-			<input class="btn btn-default" type="submit" name="Submit Type" value="Back">
-		</form>
+		<div class = "info_header">
+                        <form method="post" class="info_button">
+                                <input class="btn btn-default" type="submit" name="Submit Type" value="(back)">
+                        </form>
+                </div>
 		<div class="container">
-			<form action="" method="post" class="login_form">
-				What's on your mind... <br>
-				<label for="message">Message: </label>
-				<input type="text" placeholder="Message" name="message" value="{{ request.form.message }}"><br>
+			<div class="feed_head">
+				<form action="" method="post" class="login_form">
+					What's on your mind... <br>
+					<label for="message">Message: </label>
+					<input type="text" placeholder="Message" name="message" value="{{ request.form.message 
+}}"><br>	
 
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Reply">
-			</form>
-			<form method="post">
-				Sort by: 
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Recency">
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Likes">
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Relevancy">
-			</form>
-
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Make Reply">
+				</form>
+			</div>
+			<div class="feed_head">
+				<form method="post" class="login_form">
+					Sort by: 
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Recency">
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Likes">
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Relevancy">
+				</form>
+			</div>
+			<div class = "comment_head">Original post:</div>
 			<div class = "post">
 			        <div class = "post_header">
 		                        Original Post
@@ -36,6 +43,7 @@
 			                {{ message }}        
 			        </div>
 			</div>
+			<div class = "comment_head">Replies:</div>
 			{% for c in comments %}
 			<div class = "post">
 			        <div class = "post_header">

@@ -114,7 +114,7 @@ def feed(username, location, search_tag):
         print("Current user deleted a post")
         queries.deletepost(request.form['postId'])
     
-    elif request.form['Submit Type'] == 'My Info':
+    elif request.form['Submit Type'] == '(my info)':
         print('Redirecting to user page', username, location)
         return redirect(url_for('user_page', username=username, location=location, search_tag="None"))
         
@@ -197,7 +197,7 @@ def comments_feed(username, location, postid):
         print("Current user sorting post replies by relevancy")
         sort_type = "relevancy"
 
-    elif request.form['Submit Type'] == 'Back':
+    elif request.form['Submit Type'] == '(back)':
         sort_type = "comment_id"
         return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
@@ -246,7 +246,7 @@ def user_page(username, location):
             tod_labels=["Early Morning", "Morning", "Afternoon", "Evening"],
             tag_labels=tag_labels
         )
-    if request.form['Submit Type'] == 'Back':
+    if request.form['Submit Type'] == '(back)':
         return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
 if __name__ == '__main__':

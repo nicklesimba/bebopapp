@@ -9,26 +9,36 @@
 	</head>
 	<body>
 		<div class = "header">Bebop</div>
+		<div class = "info_header">
+			<form method="post" class="info_button">
+               			<input class="btn btn-default" type="submit" name="Submit Type" value="(my info)">
+                       	</form>
+		</div>
 		<div class="container">
-			<form action="" method="post" class="search_tags">
-				Search by tag:  
-				<input type="text" placeholder="Search Tag" name="search_tag" value="{{ request.form.search_tag }}"><br>
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Search Tag">
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Clear Tag">
-			</form>
-			<form method="post">
-				<input class="btn btn-default" type="submit" name="Submit Type" value="My Info">
-			</form>
-			<form action="" method="post" class="login_form">
-				What's on your mind... <br>
-				<label for="message">Message: </label>
-				<input type="text" placeholder="Message" name="message" value="{{ request.form.message }}"><br>
-				<label for="tags">Tags: </label>
-				<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}"><br>
-				<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
-			</form>
+			<div class = "feed_head">
+				<form action="" method="post" class="login_form">
+					Search by tag:  
+					<input type="text" placeholder="Search Tag" name="search_tag" value="{{ 
+request.form.search_tag }}"><br>
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Search Tag">
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Clear Tag">
+				</form>
+			</div>
+			<div class = "feed_head">
+				<form action="" method="post" class="login_form">
+					What's on your mind... <br>
+					<label for="message">Message: </label>
+					<input type="text" placeholder="Message" name="message" value="{{ request.form.message 
+}}"><br>
+					<label for="tags">Tags: </label>
+					<input type="text" placeholder="Tags" name="tags" value="{{ request.form.tags }}"><br>
+					<input class="btn btn-default" type="submit" name="Submit Type" value="Make Post">
+				</form>
+			</div>
 			{% if search_tag != "None" %}
-				Showing posts with the {{ search_tag }} tag...
+				<div class = "showing_posts">
+					Showing posts with the {{ search_tag }} tag...
+				</div>
 			{% endif %}
 			{% for post in posts %}
 			<div class = "post">
@@ -38,7 +48,9 @@
 				<div class = "post_body">
 					{{ post_info[post]['message'] }}
 				</div>
-				Tags: {{ post_info[post]['tags'] }}
+				<div class = "post_tags">
+					Tags: {{ post_info[post]['tags'] }}
+				</div>
 				<div class = "interactions">
 					<form method ="post" action="">
 						<input type="hidden" id="postId" name="postId" value="{{ post }}">

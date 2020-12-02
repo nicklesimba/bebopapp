@@ -6,9 +6,9 @@
     <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='styles.css') }}">
   </head>
   <body>
-    <div class="login_container">
       <div class="header_login">Welcome to Bebop! Please Login or Register</div>
       <br>
+	<div class="feed_head">
       <form class="login_form" action="" method="post">
         <label for="username">Username: </label>
         <input type="text" placeholder="Username" name="username" value="{{request.form.username}}"><br>

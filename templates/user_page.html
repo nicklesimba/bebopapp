@@ -10,26 +10,22 @@
 	</head>
 	<body>
 		<div class = "header">Information for {{ username }}</div>
-		<form method="post">
-			<input class="btn btn-default" type="submit" name="Submit Type" value="Back">
-		</form>
-		Recent
-		{% for item in recent_dict %} {{ item['likes'] }},{% endfor %}
-		Location
-		{% for item in location_dict %} {{ item['location'] }},{% endfor %}
-		{% for item in location_dict %} {{ item['count'] }},{% endfor %}
-
-		<div class="linecontainer">
-			<div class="linegraph">
+		<div class = "info_header">
+                        <form method="post" class="info_button">
+                                <input class="btn btn-default" type="submit" name="Submit Type" value="(back)">
+                        </form>
+                </div>
+		<div class="graphcontainer">
+			<div class="graph">
 				<center>
-				<canvas id="linegraphcode" height='160'></canvas>
+				<canvas id="linegraphcode"></canvas>
 				<script>
 				var canvas = document.getElementById("linegraphcode");
 				var ctx = canvas.getContext('2d');
 
 				Chart.defaults.global.defaultFontSize = 16;
-				Chart.defaults.global.defaultFontFamily = 'open_sansregular';
-
+				Chart.defaults.global.defaultFontFamily = "'Roboto', sans-serif";
+				
 				var data = {
 					labels : ["5", "4", "3", "2", "1"],
 					datasets : [
@@ -51,8 +47,10 @@
 				}
 
 				var options = {
+					responsive: true,
+					maintainAspectRatio: true,
 					legend: {
-						display: false,
+						display: true,
 						labels: {
 								fontColor: 'rgb(255, 99, 132)'
 						}
@@ -60,12 +58,12 @@
 					scales: {
 						xAxes: [{
 							display: true,
-							scaleLabel: {
-							display: true,
-								labelString: 'Nth-Recent Session'
-							}
 						}]
 					},
+					title: {
+           					display: true,
+            					text: 'Likes/Dislikes Per Nth Recent Post'
+        				}
 				}
 
 				var lineChart = new Chart(ctx, {
@@ -76,12 +74,9 @@
 				</script>
 				</center>
 			</div>
-		</div>
-	
-		<div class = "piecontainer">
-			<div class="piegraph">
+			<div class="graph">
 				<center>
-				<canvas id="piegraphcode" height='240'></canvas>
+				<canvas id="piegraphcode"></canvas>
 				<script>
 				var canvas = document.getElementById("piegraphcode");
 				var ctx = canvas.getContext('2d');
@@ -100,13 +95,19 @@
 							'rgb(75,93,102)',
 							'rgb(226,280,307)'],
 						data: [{% for item in location_dict %} {{ item['count'] }},{% endfor %}],
-						borderColor:	['black', 'black', 'black'],
+						borderColor:	['black', 'black', 'black', 'black'],
 						borderWidth: [2,2,2]
 						}
 					]
 				};
 
 				var options = {
+					responsive: true,
+                                        maintainAspectRatio: false,						
+					title: {
+           					display: true,
+         					   text: '# of Posts By Location'
+       					 }				
 				};
 
 				var myBarChart = new Chart(ctx, {
@@ -117,13 +118,9 @@
 				</script>
 				</center>
 			</div>
-		</div>
-
-
-		<div class = "barcontainer">
-			<div class="bargraph">
+			<div class="graph">
 				<center>
-				<canvas id="bargraphcode" height='240'></canvas>
+				<canvas id="bargraphcode"></canvas>
 				<script>
 				var ctx = document.getElementById("bargraphcode");
 				var myChart = new Chart(ctx, {
@@ -131,7 +128,6 @@
 				data: {
 					labels: {{ tod_labels | tojson }},
 					datasets: [{
-						label: 'Times of Day of Posts',
 						data: [{% for item in tod_counts %} {{ tod_counts[item] }},{% endfor %}],
 						backgroundColor: [
 							'rgba(255, 99, 132, 0.2)',
@@ -152,13 +148,21 @@
 				},
 
 				options: {
-					responsive: false,
+					legend: {
+                                                display: false,
+                                        },
+					title: {
+                                                        display: true,
+                                                        text: 'Activity By Time of Day'
+                                                },
+					responsive: true,
+                                        maintainAspectRatio: true,
 					scales: {
 						xAxes: [{
 						ticks: {
 							maxRotation: 90,
 							minRotation: 80
-						}
+						},
 						}],
 						yAxes: [{
 						ticks: {
@@ -171,12 +175,9 @@
 				</script>
 				</center>
 			</div>
-		</div>
-
-		<div class = "barcontainer">
-			<div class="bargraph">
+			<div class="graph">
 				<center>
-				<canvas id="bargraphcode2" height='240'></canvas>
+				<canvas id="bargraphcode2"></canvas>
 				<script>
 				var ctx = document.getElementById("bargraphcode2");
 var myChart = new Chart(ctx, {
@@ -184,7 +185,6 @@ type: 'bar',
 data: {
     labels: {{ tag_labels | tojson }},
     datasets: [{
-        label: '# of Posts By Tag',
         data: [{% for item in tag_counts %} {{ item['count'] }},{% endfor %}],
         backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
@@ -219,18 +219,26 @@ data: {
   },
 
 options: {
-    responsive: false,
+	title: {
+            display: true,
+            text: '# of Posts By Tag'
+        },
+	legend: {
+        	display: false,
+                         },
+	responsive: true,
+        maintainAspectRatio: true,
     scales: {
         xAxes: [{
         ticks: {
             maxRotation: 90,
             minRotation: 80
-        }
+        },
         }],
         yAxes: [{
         ticks: {
             beginAtZero: true
-        }
+        },
         }]
     }
 }
