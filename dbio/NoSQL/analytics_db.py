@@ -31,3 +31,25 @@ class AnalyticsDB:
         matchDict['username'] = username
         projectDict['_id'] = 0
         return self.postDataColl.find(matchDict, projectDict)
+
+    def aggregate_location_data(self, username):
+        matchDict = {}
+        projectDict = {}
+        groupDict = {}
+        sortDict = {}
+
+        matchDict['username'] = username
+        groupDict['_id'] = "$location"
+        groupDict['count'] = { "$sum" : 1 }
+        projectDict['_id'] = 0
+        projectDict['_id'] = 0
+        projectDict['location'] = "$_id"
+        projectDict['count'] = 1
+        sortDict['location'] = 1
+
+        matchDict = { "$match": matchDict }
+        groupDict = { "$group": groupDict }
+        projectDict = { "$project": projectDict }
+        sortDict = { "$sort": sortDict }
+
+        return self.postDataColl.aggregate([matchDict, groupDict, projectDict, sortDict])
