@@ -6,11 +6,133 @@
 		<title>{{ username }}</title>
 		<link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='styles.css') }}">
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 	</head>
 	<body>
-                <div class = "header">Information for {{ username }}</div>
+		<div class = "header">Information for {{ username }}</div>
 		<form method="post">
 			<input class="btn btn-default" type="submit" name="Submit Type" value="Back">
 		</form>
+		Location
+		{{ location_dict }} <br>
+		Tag
+		{{ tag_dict }} <br>
+		Recent
+		{{ recent_dict }} <br>
+		Time
+		{{ time_dict }} <br>
+
+		<div class="linecontainer">
+			<div class="linegraph">
+				<center>
+				<canvas id="linegraphcode" height='160'></canvas>
+				<script>
+				var canvas = document.getElementById("linegraphcode");
+				var ctx = canvas.getContext('2d');
+
+				Chart.defaults.global.defaultFontSize = 16;
+				Chart.defaults.global.defaultFontFamily = 'open_sansregular';
+
+				var data = {
+					labels : ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
+					datasets : [
+						{
+						label: "Name 1",
+						backgroundColor: 'rgba(226,280,307,.6)',
+						borderColor: 'rgba(75,93,102,1)',
+							pointBackgroundColor: 'rgba(75,93,102,1)',
+						data: [1,2,3,4]
+						},
+						{
+						label: "Name 2",
+						backgroundColor: "rgba(300,240,257,.6)",
+						borderColor: "rgba(100,93,102,1)",
+							pointBackgroundColor: "rgba(100,93,102,1)",
+						data: [4,3,2,1]
+						}
+					],
+				}
+
+				var options = {
+					legend: {
+						display: false,
+						labels: {
+								fontColor: 'rgb(255, 99, 132)'
+						}
+					},
+					scales: {
+						xAxes: [{
+							display: true,
+							scaleLabel: {
+							display: true,
+								labelString: 'Nth-Recent Session'
+							}
+						}]
+					},
+				}
+
+				var lineChart = new Chart(ctx, {
+					type: 'line',
+					data: data,
+					options: options
+				});
+				</script>
+				</center>
+			</div>
+		</div>
+	
+		<div class = "piecontainer">
+			<div class="piegraph">
+				<center>
+				<canvas id="piegraphcode" height='240'></canvas>
+				<script>
+				var canvas = document.getElementById("piegraphcode");
+				var ctx = canvas.getContext('2d');
+
+				// Global Options:
+				Chart.defaults.global.defaultFontColor = 'black';
+				Chart.defaults.global.defaultFontSize = 16;
+
+				var data = {
+					labels: ["Solo", "Duo", "Squad"],
+					datasets: [
+						{
+						fill: true,
+						backgroundColor: [
+							'rgb(151,187,205)',
+							'rgb(75,93,102)',
+							'rgb(226,280,307)'],
+						data: [1,2,3,4],
+						borderColor:	['black', 'black', 'black'],
+						borderWidth: [2,2,2]
+						}
+					]
+				};
+
+				var options = {
+				};
+
+				var myBarChart = new Chart(ctx, {
+					type: 'pie',
+					data: data,
+					options: options
+				});
+				</script>
+				</center>
+			</div>
+		</div>
+
+
+		<div class = "barcontainer">
+			<div class="bargraph">
+				<center>
+				<canvas id="bargraphcode" height='240'></canvas>
+				<script>
+				THIRD SCRIPT
+				</script>
+				</center>
+			</div>
+		</div>
+
 	</body>
 </html>

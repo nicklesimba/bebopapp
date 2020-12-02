@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, render_template, redirect, url_for
 import dbio.SQL.users as users
 import dbio.SQL.feed as queries
+from dbio.NoSQL import analytics_db
 import gensim 
 from gensim.models import Word2Vec 
 import gensim.downloader as api
@@ -14,6 +15,7 @@ static_path = os.path.join(project_root, 'static')
 app = Flask(__name__, template_folder=template_path, static_folder=static_path)
 
 model = gensim.models.KeyedVectors.load('local.model')
+mongo = analytics_db.AnalyticsDB()
 sort_type = "comment_id"
 
 def _byte_decode(text):
@@ -207,8 +209,21 @@ def comments_feed(username, location, postid):
 
 @app.route('/user/<username>/<location>', methods=['GET', 'POST'])
 def user_page(username, location):
+    location_dict = mongo.aggregate_location_data(username)
+    tag_dict = mongo.aggregate_tag_usage(username)
+    recent_dict = mongo.aggregate_recent_posts(username)
+    time_dict = mongo.aggregate_post_timeOfDay(username)
+
     if request.method == 'GET':
-        return render_template('user_page.html', username=username, location=location)
+        return render_template(
+            'user_page.html', 
+            username=username, 
+            location=location,
+            location_dict=location_dict,
+            tag_dict=tag_dict,
+            recent_dict=recent_dict,
+            time_dict=time_dict
+        )
     if request.form['Submit Type'] == 'Back':
         return redirect(url_for('feed', username=username, location=location, search_tag="None"))
 
