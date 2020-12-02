@@ -24,3 +24,10 @@ class AnalyticsDB:
 
         self.postDataColl.insert_one(document)
 
+
+    def collect_user_data(self, username):
+        matchDict = {}
+        projectDict = {}
+        matchDict['username'] = username
+        projectDict['_id'] = 0
+        return self.postDataColl.find(matchDict, projectDict)
