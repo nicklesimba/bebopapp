@@ -3,6 +3,9 @@ from __future__ import print_function
 import calendar
 import mysql.connector as my
 import time
+from dbio.NoSQL import analytics_db
+
+analyticsDB = analytics_db.AnalyticsDB()
 
 # func - feed_query
 # desc - takes in a username and returns most recent posts within the user's area.
@@ -152,6 +155,8 @@ def createpost(user, location, post_message, tags):
     db.commit()
     cursor.close()
     db.close()
+
+    analyticsDB.add_new_post_data(user, post_id, (post_id % 86400))
 
 def createcomment(postid, user, message, score):
     db = my.connect(
